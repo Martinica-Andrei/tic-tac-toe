@@ -1,11 +1,12 @@
 import React from 'react'
 import appCSS from '../css/app.module.css'
-
+import Game from './Game';
 interface ComponentProps {
    
 }
 interface ComponentState {
     hidden: boolean;
+    isPlayGame: boolean;
 }
 
 class MainMenu extends React.Component<ComponentProps, ComponentState> {
@@ -15,12 +16,18 @@ class MainMenu extends React.Component<ComponentProps, ComponentState> {
 
         this.state = {
             hidden: false,
+            isPlayGame: false,
         }
     }
 
     render(): React.ReactNode {
         if (this.state.hidden) {
             return null;
+        }
+        if(this.state.isPlayGame){
+            return (
+                <Game></Game>
+            );
         }
         return (
             <div>
@@ -35,6 +42,7 @@ class MainMenu extends React.Component<ComponentProps, ComponentState> {
     }
 
     playHandler = () =>{
+        this.setState({isPlayGame:true});
     }
 
 }

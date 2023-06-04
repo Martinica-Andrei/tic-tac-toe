@@ -40,4 +40,5 @@ body{
 .actionButton:hover{
     color: var(--pink);
     text-decoration:underline;
+    cursor: pointer;
 }
