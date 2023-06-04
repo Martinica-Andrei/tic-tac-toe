@@ -1,5 +1,5 @@
 import React from 'react';
-import gridCSS from '../css/grid.module.css'
+import gridCSS from '../css/grid.module.css';
 
 interface ComponentProps {
 
@@ -31,10 +31,10 @@ class Grid extends React.Component<ComponentProps, ComponentState>{
 
         for(let r = 0; r < this._rows; r++){
             let cells = [];
-            var hasBottomClass = r == this._rows - 1 ? gridCSS.bottomDiv : '';
+            var hasBottomClass = r === this._rows - 1 ? gridCSS.bottomDiv : '';
             for(let c = 0; c < this._cols; c++){
                 var classes = gridCSS.cell + ' ' + hasBottomClass;
-                if(c == this._cols - 1){
+                if(c === this._cols - 1){
                    classes += ' ' + gridCSS.rightDiv;
                 }
                 cells.push(<div key={c} className={classes}></div>)
