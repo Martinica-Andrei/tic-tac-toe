@@ -1,18 +1,18 @@
 import React from 'react';
 import MainMenu from './MainMenu';
-import Grid from './Grid';
+import GridManager from './GridManager';
 
-interface ComponentProps {
+interface IProps {
 
 }
 
-interface ComponentState {
+interface IState {
     isMainMenu: boolean;
     isPlay: boolean;
 }
 
-class Game extends React.Component<ComponentProps, ComponentState>{
-    constructor(props: ComponentProps) {
+class Game extends React.Component<IProps, IState>{
+    constructor(props: IProps) {
         super(props);
 
         this.state = {
@@ -32,7 +32,7 @@ class Game extends React.Component<ComponentProps, ComponentState>{
             return (
                 <div style={{ width: "100%", height: "100%" }}>
                     <button style={{ width: "150px", height: "70px", fontSize: "30px" }} onClick={this.activateMainMenu}>Back</button>
-                    <Grid></Grid>
+                    <GridManager></GridManager>
                 </div>
             );
         }

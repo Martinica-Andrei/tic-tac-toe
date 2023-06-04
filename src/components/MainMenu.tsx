@@ -1,14 +1,16 @@
 import React from 'react';
 import appCSS from '../css/app.module.css';
-interface ComponentProps {
-    game : any
+import type Game from './Game';
+
+interface IProps {
+    game : Game;
 }
-interface ComponentState {
+interface IState {
 }
 
-class MainMenu extends React.Component<ComponentProps, ComponentState> {
+class MainMenu extends React.Component<IProps, IState> {
 
-    constructor(props: ComponentProps) {
+    constructor(props: IProps) {
         super(props);
 
         this.state = {

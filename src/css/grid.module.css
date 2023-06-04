@@ -1,5 +1,5 @@
 .grid {
-    position: relative;
+    position: absolute;
     background-color: var(--white);
     width:450px;
     height:450px;
