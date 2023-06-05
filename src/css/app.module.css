@@ -1,18 +1,18 @@
 :root{
-    --red: #a01637;
-    --white: #F5F5F5;
-    --pink : #D7234A;
-    --black : #262223;
-    --gray: #EFEAEE;
-    --title-color :#F72F56
+    --red: 160,22,55;
+    --white: 245,245,245;
+    --pink : 215,35,74;
+    --black : 38,34,35;
+    --gray: 239, 234, 238;
+    --title-color : 247, 47, 86;
 }
 
 body{
-    background-color: var(--red);
+    background-color: rgb(var(--red));
 }
 
 .title{
-    color: var(--title-color);
+    color: rgb(var(--title-color));
     text-align:center;
     margin-top:50px;
     font-size:60px;
@@ -20,7 +20,7 @@ body{
 
 .gameMenu{
     margin: auto;
-    background-color: var(--white);
+    background-color: rgb(var(--white));
     width:500px;
     height:200px;
     padding:15px;
@@ -33,12 +33,12 @@ body{
     margin-top: 15px;
     border: none;
     background: none;   
-    color: var(--black);
+    color: rgb(var(--black));
     font-size:30px;
 }
 
 .actionButton:hover{
-    color: var(--pink);
+    color: rgb(var(--pink));
     text-decoration:underline;
     cursor: pointer;
 }

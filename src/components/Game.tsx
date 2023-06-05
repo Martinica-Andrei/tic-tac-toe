@@ -28,11 +28,11 @@ class Game extends React.Component<IProps, IState>{
                 <MainMenu game={this}></MainMenu>
             );
         }
-        if (this.state.isPlay) {
+        else if (this.state.isPlay) {
             return (
                 <div style={{ width: "100%", height: "100%" }}>
                     <button style={{ width: "150px", height: "70px", fontSize: "30px" }} onClick={this.activateMainMenu}>Back</button>
-                    <GridManager></GridManager>
+                    <GridManager game={this}></GridManager>
                 </div>
             );
         }

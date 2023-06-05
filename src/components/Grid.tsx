@@ -3,68 +3,64 @@ import gridCSS from '../css/grid.module.css';
 import Cell from './Cell';
 
 interface IProps {
-
+    matrix: string[][];
+    rows: number;
+    cols: number;
 }
 
 interface IState {
-    matrix: string[][]
 }
 
 class Grid extends React.Component<IProps, IState>{
-    private _rows: number;
-    private _cols: number;
+
     constructor(props: IProps) {
         super(props);
 
-        this._rows = 3;
-        this._cols = 3;
-
         this.state = {
-            matrix: this.createMatrix()
         };
-
 
     }
 
-    createRows() : any{
-        var rows = [];
+    createDivRows(): JSX.Element[] {
 
-        for(let r = 0; r < this._rows; r++){
-            let cells = [];
-            var hasBottomClass = r === this._rows - 1 ? gridCSS.bottomDiv : '';
-            for(let c = 0; c < this._cols; c++){
-                var classes = gridCSS.cell + ' ' + hasBottomClass;
-                if(c === this._cols - 1){
-                   classes += ' ' + gridCSS.rightDiv;
-                }
-                cells.push(<Cell key={c} className={classes}></Cell>)
-            }
-            rows.push(<div key={r} className={gridCSS.row}>{cells}</div>);
+        var divRows = [];
+        for (let r = 0; r < this.props.rows; r++) {
+            divRows.push(this.createDivRow(r));
         }
-        return rows;
+        return divRows;
+    }
+
+    createDivRow(r: number): JSX.Element {
+        let cells = this.createCellsForRow(r);
+        return <div key={r} className={gridCSS.row}>{cells}</div>;
+    }
+
+    createCell(r: number, c: number): JSX.Element {
+        var hasBottomClass = r === this.props.rows - 1 ? gridCSS.bottomDiv : '';
+        var classes = gridCSS.cell + ' ' + hasBottomClass;
+        if (c === this.props.cols - 1) {
+            classes += ' ' + gridCSS.rightDiv;
+        }
+        return <Cell key={c} className={classes}>{this.props.matrix[r][c]}</Cell>;
+    }
+
+    createCellsForRow(r: number): JSX.Element[] {
+        let cells = [];
+        for (let c = 0; c < this.props.cols; c++) {
+            cells.push(this.createCell(r, c));
+        }
+        return cells;
     }
 
     render(): React.ReactNode {
-        
-        var rows = this.createRows();
+
+        var divRows = this.createDivRows();
         return (
             <div className={gridCSS.grid}>
-                {rows}
+                {divRows}
             </div>
         );
     }
-
-    private createMatrix(): string[][] {
-        let matrix: string[][] = [];
-        for (let r = 0; r < this._rows; r++) {
-            matrix.push([]);
-            for (let c = 0; c < this._cols; c++) {
-                matrix[r].push(' ');
-            }
-        }
-        return matrix;
-    }
-
 
 }
 

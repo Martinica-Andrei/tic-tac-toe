@@ -1,6 +1,6 @@
 .grid {
     position: absolute;
-    background-color: var(--white);
+    background-color: rgb(var(--white));
     width:450px;
     height:450px;
     padding:25px;
@@ -20,16 +20,16 @@
 }
 
 .cell{
-    border-top:1px solid var(--black);
-    border-left:1px solid var(--black);
+    border-top:1px solid rgb(var(--black));
+    border-left:1px solid rgb(var(--black));
     width:100%;
     height:100%;
 }
 
 .rightDiv{
-    border-right: 1px solid var(--black);
+    border-right: 1px solid rgb(var(--black));
 }
 
 .bottomDiv{
-    border-bottom: 1px solid var(--black);
+    border-bottom: 1px solid rgb(var(--black));
 }

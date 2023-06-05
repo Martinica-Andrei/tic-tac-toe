@@ -21,10 +21,11 @@ class Cell extends React.Component<IProps, IState>{
 
     render(): React.ReactNode {
         return (
-            <div className={this.props.className}>{this.props.children}</div>
+            <div className={`${this.props.className} noSelect`}>{this.props.children}</div>
         );
     }
-
+    
+    
 
 }
 
