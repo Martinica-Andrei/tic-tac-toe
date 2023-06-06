@@ -13,8 +13,9 @@ class Character {
     }
 
     action() : void {
-
+       
     }
+
 }
 
 export default Character;

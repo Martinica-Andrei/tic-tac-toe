@@ -1,11 +1,13 @@
 import React from 'react';
 import gridCSS from '../css/grid.module.css';
 import Cell from './Cell';
+import Vector2 from '../classes/Vector2';
 
 interface IProps {
     matrix: string[][];
     rows: number;
     cols: number;
+    clickFunc : (cell : Cell) => void;
 }
 
 interface IState {
@@ -41,7 +43,7 @@ class Grid extends React.Component<IProps, IState>{
         if (c === this.props.cols - 1) {
             classes += ' ' + gridCSS.rightDiv;
         }
-        return <Cell key={c} className={classes}>{this.props.matrix[r][c]}</Cell>;
+        return <Cell pos={new Vector2(c, r)} clickFunc={this.props.clickFunc} key={c} className={classes}>{this.props.matrix[r][c]}</Cell>;
     }
 
     createCellsForRow(r: number): JSX.Element[] {
@@ -61,6 +63,7 @@ class Grid extends React.Component<IProps, IState>{
             </div>
         );
     }
+
 
 }
 

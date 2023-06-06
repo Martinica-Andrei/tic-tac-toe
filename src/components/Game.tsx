@@ -19,7 +19,6 @@ class Game extends React.Component<IProps, IState>{
             isMainMenu: true,
             isPlay: false
         };
-
     }
 
     render(): React.ReactNode {
