@@ -1,49 +1,38 @@
-import React from 'react';
+import React, { useState } from 'react';
 import MainMenu from './MainMenu';
 import GridManager from './GridManager';
+import GameContext, {IGameContext} from '../context/GameContext';
 
-interface IProps {
+const IS_MAIN_MENU_STATE = 0;
+const IS_PLAY_STATE = 1;
 
-}
+const Game = () => {
 
-interface IState {
-    isMainMenu: boolean;
-    isPlay: boolean;
-}
+    const [gameState, setGameState] = useState(IS_MAIN_MENU_STATE);
 
-class Game extends React.Component<IProps, IState>{
-    constructor(props: IProps) {
-        super(props);
-
-        this.state = {
-            isMainMenu: true,
-            isPlay: false
-        };
+    const setMainMenu = () =>{
+        setGameState(IS_MAIN_MENU_STATE);
     }
 
-    render(): React.ReactNode {
-        if (this.state.isMainMenu) {
-            return (
-                <MainMenu game={this}></MainMenu>
-            );
+    const setPlay = () =>{
+        setGameState(IS_PLAY_STATE);
+    }
+
+    const gameContextValue : IGameContext = {
+        state :{
+            setMainMenu : setMainMenu,
+            setPlay : setPlay
         }
-        else if (this.state.isPlay) {
-            return (
-                <div style={{ width: "100%", height: "100%" }}>
-                    <button style={{ width: "150px", height: "70px", fontSize: "30px" }} onClick={this.activateMainMenu}>Back</button>
-                    <GridManager game={this}></GridManager>
-                </div>
-            );
-        }
-    }
+    } 
 
-    activateMainMenu = () =>{
-        this.setState({isMainMenu : true, isPlay : false});
-    }
-
-    activateGame = () =>{
-        this.setState({isMainMenu : false, isPlay : true});
-    }
-}
+    return (
+        <GameContext.Provider value={gameContextValue}>
+          <div>
+            {gameState === IS_MAIN_MENU_STATE && <MainMenu />}
+            {gameState === IS_PLAY_STATE && <GridManager />}
+          </div>
+        </GameContext.Provider>
+      );
+};
 
 export default Game;

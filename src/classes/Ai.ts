@@ -1,33 +1,42 @@
 import Character from "./Character";
-import type GridManager from "../components/GridManager";
-import type Game from "../components/Game";
 import Vector2 from "./Vector2";
 import { shuffleArray } from "./Utils";
+import { IGameContext } from "../context/GameContext";
+import type { IGridManagerPublicData } from "../components/GridManager"
 
 
 class Ai extends Character {
-
-    constructor(game: Game, gridManager: GridManager) {
-        super(game, gridManager);
+    private _actionTimeout: number;
+    constructor(gameContext: IGameContext, gridManager: IGridManagerPublicData) {
+        super(gameContext, gridManager);
+        this._actionTimeout = 0;
     }
 
-    action() {
-        let possibleMoves : Vector2[] = [];
+    action(): void {
+        this._actionTimeout = setTimeout(this.easyAction, 500, []);
 
-        for(let r = 0 ; r < this.gridManager.rows(); r++){
-            for(let c =0; c < this.gridManager.cols(); c++){
-                if(this.gridManager.state.matrix[r][c].length === 0){
+    }
+
+    easyAction = () => {
+        const matrix = this.gridManager.matrix;
+        let possibleMoves: Vector2[] = [];
+
+        for (let r = 0; r < matrix.rows; r++) {
+            for (let c = 0; c < matrix.cols; c++) {
+                if (matrix.data[r][c].length === 0) {
                     possibleMoves.push(new Vector2(c, r));
                 }
             }
-        }     
-        if(possibleMoves.length === 0) return;
+        }
+        if (possibleMoves.length === 0) return;
         shuffleArray(possibleMoves);
         let move = possibleMoves[0];
-        let matrix = this.gridManager.state.matrix;
-        matrix[move.y][move.x] = this.symbol;
-        this.gridManager.setState({matrix: matrix});
-        this.gridManager.nextPlayerAction();
+        this.gridManager.setMatrixValue(move.y, move.x, this.symbol);
+        this.gridManager.nextCharacterAction();
+    }
+
+    destructor(): void {
+        clearTimeout(this._actionTimeout);
     }
 }
 

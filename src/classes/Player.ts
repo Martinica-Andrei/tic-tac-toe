@@ -1,22 +1,26 @@
 import Character from "./Character";
-import type GridManager from "../components/GridManager";
-import type Game from "../components/Game";
-import type Cell from "../components/Cell";
+import Vector2 from "./Vector2";
+import { IGameContext } from "../context/GameContext";
+import type {IGridManagerPublicData} from "../components/GridManager"
 
 class Player extends Character{
-    constructor(game : Game, gridManager: GridManager){
-        super(game, gridManager);
+    constructor(gameContext : IGameContext, gridManager :IGridManagerPublicData){
+        super(gameContext, gridManager);
     }
 
-    action() {
-        this.gridManager.setState({clickFunc : this.gridClickHandler});
+    action() : void {
+        this.gridManager.setClickFunc(this.gridClickHandler);
     }
 
-    gridClickHandler = (cell : Cell) =>{
-        let gridMatrix = this.gridManager.state.matrix;
-        gridMatrix[cell.props.pos.y][cell.props.pos.x] = this.symbol;
-        this.gridManager.setState({matrix: gridMatrix, clickFunc: () =>{}});
-        this.gridManager.nextPlayerAction();
+    gridClickHandler = (pos : Vector2) =>{
+        const {x, y } = pos;
+        this.gridManager.setMatrixValue(y, x, this.symbol);
+        this.gridManager.setClickFunc(() =>{});
+        this.gridManager.nextCharacterAction();
+    }
+
+    destructor(): void {
+        
     }
 }
 

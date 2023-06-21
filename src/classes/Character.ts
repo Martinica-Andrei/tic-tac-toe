@@ -1,20 +1,21 @@
-import type GridManager from "../components/GridManager";
-import type Game from "../components/Game";
+import type {IGridManagerPublicData} from "../components/GridManager"
+import {IGameContext} from "../context/GameContext";
 
-class Character {
-    game: Game;
-    gridManager: GridManager;
+abstract class Character {
+    gameContext : IGameContext;
+    gridManager : IGridManagerPublicData;
     symbol: string;
+    name : string;
 
-    constructor(game: Game, gridManager: GridManager) {
-        this.game = game;
-        this.gridManager = gridManager;
+    constructor(gameContext : IGameContext, gridManager : IGridManagerPublicData) {
+        this.gameContext = gameContext;
+        this.gridManager =  gridManager;
         this.symbol = '';
+        this.name = '';
     }
 
-    action() : void {
-       
-    }
+    abstract action() : void;
+    abstract destructor() : void;
 
 }
 

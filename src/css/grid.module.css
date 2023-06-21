@@ -33,3 +33,13 @@
 .bottomDiv{
     border-bottom: 1px solid rgb(var(--black));
 }
+
+.gameOverMessage{
+    position: absolute;
+    font-size:64px;
+    color: rgb(var(--white));
+    left:50%;
+    top:10%;
+    transform: translate(-50%, -50%);
+    background-color: rgb(var(--red));
+}

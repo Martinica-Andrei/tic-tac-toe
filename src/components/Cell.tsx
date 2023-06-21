@@ -2,37 +2,26 @@ import React from 'react';
 import Vector2 from '../classes/Vector2';
 
 interface IProps {
-    className? : string;
-    children : string;
-    pos : Vector2;
-    clickFunc : (cell : Cell) => void;
+    className?: string;
+    children: string;
+    pos: Vector2;
+    clickFunc: (pos : Vector2) => void;
 }
 
-interface IState {
+const Cell = (props: IProps) =>{
 
-}
 
-class Cell extends React.Component<IProps, IState>{
-
-    constructor(props: IProps) {
-        super(props);
-
-        this.state = {
-
-        };
-    }
-
-    render(): React.ReactNode {
-        return (
-            <div className={`${this.props.className} noSelect`} onClick={this.clickHandler}>{this.props.children}</div>
-        );
-    }
-    
-    private clickHandler = () =>{
-        if(this.props.children.length === 0){
-        this.props.clickFunc(this);
+    const clickHandler = () => {
+        if (props.children.length === 0) {
+            props.clickFunc(props.pos);
         }
-    }
+    };
+
+    return (
+        <div className={`${props.className} noSelect`} onClick={clickHandler}>{props.children}</div>
+    );
+
+
 
 }
 

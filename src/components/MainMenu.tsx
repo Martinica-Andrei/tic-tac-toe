@@ -1,39 +1,21 @@
-import React from 'react';
-import appCSS from '../css/app.module.css';
-import type Game from './Game';
+import React, {useContext} from 'react';
+import appCSS from '../css/app.module.css'
+import GameContext from '../context/GameContext';
 
-interface IProps {
-    game : Game;
-}
-interface IState {
-}
+const MainMenu = () => {
 
-class MainMenu extends React.Component<IProps, IState> {
+    const gameContext = useContext(GameContext);
 
-    constructor(props: IProps) {
-        super(props);
-
-        this.state = {
-        };
-    }
-
-    render(): React.ReactNode {
-        return (
-            <div>
-                <h1 className={appCSS.title}>Tic Tac Toe</h1>
-                <div className={appCSS.gameMenu}>
-                    <button className={appCSS.actionButton} onClick={this.props.game.activateGame}>Play</button>
-                    <button className={appCSS.actionButton}>Options</button>
-                    <button className={appCSS.actionButton}>Leaderboard</button>
-                </div>
+    return (
+        <div>
+            <h1 className={appCSS.title}>Tic Tac Toe</h1>
+            <div className={appCSS.gameMenu}>
+                <button className={appCSS.actionButton} onClick={gameContext.state.setPlay}>Play</button>
+                <button className={appCSS.actionButton}>Options</button>
+                <button className={appCSS.actionButton}>Leaderboard</button>
             </div>
-        );
-    }
-
-    playHandler = () =>{
-        this.setState({hidden:true});
-    }
-
-}
+        </div>
+    );
+};
 
 export default MainMenu;
