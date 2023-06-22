@@ -105,10 +105,11 @@ const GridManager = () => {
         setClickFunc: setClickFuncWrapper,
         nextCharacterAction: nextCharacterActionWrapper,
         matrix: matrix
-    }
+
+    };
+
     const gridManagerPublicData = useRef(gridManagerPublicDataCopy);
-
-
+    gridManagerPublicData.current = gridManagerPublicDataCopy;
     const initCharacters = () => {
         let player = new Player(gameContext, gridManagerPublicData);
         let ai = new Ai(gameContext, gridManagerPublicData);
