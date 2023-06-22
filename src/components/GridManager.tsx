@@ -1,4 +1,4 @@
-import React, { useReducer, useContext, useState, useEffect, useMemo } from 'react';
+import React, { useReducer, useContext, useState, useEffect, useMemo, useRef } from 'react';
 import Grid from './Grid';
 import Ai from '../classes/Ai';
 import Player from '../classes/Player';
@@ -118,14 +118,16 @@ const GridManager = () => {
         return characters;
     }
 
-    const [characters, setCharacters] = useState(initCharacters);
-    const [currentCharacterIndex, setCurrentCharacterIndex] = useState(-1);
+    const characters = useRef(useMemo(initCharacters, []));
+    const currentCharacterIndex = useRef(-1);
     const [isGameOverState, setGameOverState] = useState('');
 
     useEffect(()=>{
-        setCharacters(initCharacters());
+        for(let character of characters.current){
+            character.gridManager = gridManagerPublicData;
+        }
         return () => {
-            for (let character of characters) {
+            for (let character of characters.current) {
                 character.destructor();
             }
         }
@@ -138,12 +140,11 @@ const GridManager = () => {
             setGameOverState(_isGameOver);
             return;
         }
-        let nextCharacterIndex = currentCharacterIndex + 1;
-        if (nextCharacterIndex >= characters.length) {
-            nextCharacterIndex = 0;
+        currentCharacterIndex.current++;
+        if (currentCharacterIndex.current >= characters.current.length) {
+            currentCharacterIndex.current = 0;
         }
-        setCurrentCharacterIndex(nextCharacterIndex);
-        characters[nextCharacterIndex].action();
+        characters.current[currentCharacterIndex.current].action();
     }
 
     useEffect(() => {
@@ -176,7 +177,7 @@ const GridManager = () => {
         if (isGameOverState.length === 0) {
             return undefined;
         }
-        let winner = characters.find(c => c.symbol === isGameOverState);
+        let winner = characters.current.find(c => c.symbol === isGameOverState);
         let message = winner !== undefined ? `Winner : ${winner.name}` : "TIE";
         return (
             <div className={gridCSS.gameOverMessage}>{message}</div>
