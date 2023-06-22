@@ -7,8 +7,8 @@ import type { IGridManagerPublicData } from "../components/GridManager"
 
 class Ai extends Character {
     private _actionTimeout: number;
-    constructor(gameContext: IGameContext, gridManager: IGridManagerPublicData) {
-        super(gameContext, gridManager);
+    constructor(gameContext: IGameContext, gridManagerRef: React.MutableRefObject<IGridManagerPublicData>) {
+        super(gameContext, gridManagerRef);
         this._actionTimeout = 0;
     }
 
@@ -18,7 +18,7 @@ class Ai extends Character {
     }
 
     easyAction = () => {
-        const matrix = this.gridManager.matrix;
+        const matrix = this.gridManagerRef.current.matrix;
         let possibleMoves: Vector2[] = [];
 
         for (let r = 0; r < matrix.rows; r++) {
@@ -31,8 +31,8 @@ class Ai extends Character {
         if (possibleMoves.length === 0) return;
         shuffleArray(possibleMoves);
         let move = possibleMoves[0];
-        this.gridManager.setMatrixValue(move.y, move.x, this.symbol);
-        this.gridManager.nextCharacterAction();
+        this.gridManagerRef.current.setMatrixValue(move.y, move.x, this.symbol);
+        this.gridManagerRef.current.nextCharacterAction();
     }
 
     destructor(): void {

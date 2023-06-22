@@ -75,10 +75,10 @@ const matrixReducer = (state: IMatrix, action: IMatrixAction) => {
 createMatrixData(initialMatrix);
 
 export interface IGridManagerPublicData {
-    setMatrixValue : (row : number, col : number, val : string) => void;
-    setClickFunc : (func : (pos : Vector2) => void) => void;
-    nextCharacterAction : () => void;
-    matrix : IMatrix
+    setMatrixValue: (row: number, col: number, val: string) => void;
+    setClickFunc: (func: (pos: Vector2) => void) => void;
+    nextCharacterAction: () => void;
+    matrix: IMatrix
 }
 
 const GridManager = () => {
@@ -86,26 +86,28 @@ const GridManager = () => {
 
     const [matrix, setMatrix] = useReducer(matrixReducer, initialMatrix);
     const [clickFunc, setClickFunc] = useState(emptyClickFunc);
-    const [nextCharacterAction,setNextCharacterAction] = useState(false);
+    const [nextCharacterAction, setNextCharacterAction] = useState(false);
 
-    const setMatrixValue = (row : number, col : number, val : string) =>{
-        setMatrix({setCell : {row : row, col : col , value : val}});
+    const setMatrixValue = (row: number, col: number, val: string) => {
+        setMatrix({ setCell: { row: row, col: col, value: val } });
     }
- 
-    const setClickFuncWrapper = (func : (pos : Vector2) => void) =>{
+
+    const setClickFuncWrapper = (func: (pos: Vector2) => void) => {
         setClickFunc(() => func);
     }
 
-    const nextCharacterActionWrapper = () =>{
+    const nextCharacterActionWrapper = () => {
         setNextCharacterAction(prev => !prev);
     }
 
-    const gridManagerPublicData : IGridManagerPublicData = {
-        setMatrixValue : setMatrixValue,
-        setClickFunc : setClickFuncWrapper,
-        nextCharacterAction : nextCharacterActionWrapper,
+    const gridManagerPublicDataCopy: IGridManagerPublicData = {
+        setMatrixValue: setMatrixValue,
+        setClickFunc: setClickFuncWrapper,
+        nextCharacterAction: nextCharacterActionWrapper,
         matrix: matrix
     }
+    const gridManagerPublicData = useRef(gridManagerPublicDataCopy);
+
 
     const initCharacters = () => {
         let player = new Player(gameContext, gridManagerPublicData);
@@ -122,19 +124,16 @@ const GridManager = () => {
     const currentCharacterIndex = useRef(-1);
     const [isGameOverState, setGameOverState] = useState('');
 
-    useEffect(()=>{
-        for(let character of characters.current){
-            character.gridManager = gridManagerPublicData;
-        }
+    useEffect(() => {
         return () => {
             for (let character of characters.current) {
                 character.destructor();
             }
         }
 
-    }, [matrix, clickFunc]);
+    }, []);
 
-    const characterAction = () =>{
+    const characterAction = () => {
         var _isGameOver = isGameOver();
         if (_isGameOver.length > 0) {
             setGameOverState(_isGameOver);
@@ -184,7 +183,9 @@ const GridManager = () => {
         );
 
     }
-    
+
+
+
     return (
         <div>
             <button style={{ width: "200px", height: "70px", fontSize: "30px" }} onClick={gameContext.state.setMainMenu}>Main Menu</button>
