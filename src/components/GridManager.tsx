@@ -23,12 +23,6 @@ interface IMatrix {
     data: string[][]
 }
 
-const initialMatrix: IMatrix = {
-    rows: 3,
-    cols: 3,
-    data: []
-}
-
 const createMatrixData = (matrix: IMatrix) => {
     matrix.data = [];
     let data = matrix.data;
@@ -72,7 +66,15 @@ const matrixReducer = (state: IMatrix, action: IMatrixAction) => {
     return newState;
 }
 
-createMatrixData(initialMatrix);
+const initMatrix = () => {
+    const initialMatrix: IMatrix = {
+        rows: 3,
+        cols: 3,
+        data: []
+    }
+    createMatrixData(initialMatrix);
+    return initialMatrix;
+}
 
 export interface IGridManagerPublicData {
     setMatrixValue: (row: number, col: number, val: string) => void;
@@ -84,7 +86,7 @@ export interface IGridManagerPublicData {
 const GridManager = () => {
     const gameContext = useContext(GameContext);
 
-    const [matrix, setMatrix] = useReducer(matrixReducer, initialMatrix);
+    const [matrix, setMatrix] = useReducer(matrixReducer, useMemo(initMatrix, []));
     const [clickFunc, setClickFunc] = useState(emptyClickFunc);
     const [nextCharacterAction, setNextCharacterAction] = useState(false);
 
@@ -180,7 +182,9 @@ const GridManager = () => {
         let winner = characters.current.find(c => c.symbol === isGameOverState);
         let message = winner !== undefined ? `Winner : ${winner.name}` : "TIE";
         return (
-            <div className={gridCSS.gameOverMessage}>{message}</div>
+            <>
+                <div className={gridCSS.gameOverMessage}>{message}</div>
+            </>
         );
 
     }
