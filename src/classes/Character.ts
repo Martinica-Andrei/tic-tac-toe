@@ -1,5 +1,5 @@
 import type {IGridManagerPublicData} from "../components/GridManager"
-import {IGameContext} from "../context/GameContext";
+import type {IGameContext} from "../context/GameContext";
 
 abstract class Character {
     gameContext : IGameContext;

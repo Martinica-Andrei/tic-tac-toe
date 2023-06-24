@@ -1,5 +1,5 @@
 import React from 'react';
-import Vector2 from '../classes/Vector2';
+import type Vector2 from '../classes/Vector2';
 
 interface IProps {
     className?: string;

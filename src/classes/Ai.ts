@@ -1,23 +1,28 @@
 import Character from "./Character";
 import Vector2 from "./Vector2";
 import { shuffleArray } from "./Utils";
-import { IGameContext } from "../context/GameContext";
+import type { IGameContext } from "../context/GameContext";
 import type { IGridManagerPublicData } from "../components/GridManager"
-
+import { AiDifficulty } from "./Constants";
 
 class Ai extends Character {
     private _actionTimeout: number;
+   // private _difficulty : number;
+    //private _actionBasedOnDifficulty : () => void;
     constructor(gameContext: IGameContext, gridManagerRef: React.MutableRefObject<IGridManagerPublicData>) {
         super(gameContext, gridManagerRef);
+        //this._difficulty = AiDifficulty.EASY;
+        //this._actionBasedOnDifficulty = this._easyAction;
         this._actionTimeout = 0;
     }
 
     action(): void {
-        this._actionTimeout = setTimeout(this.easyAction, 500, []);
+        console.log('waht');
+        this._actionTimeout = setTimeout(this._easyAction, 500, []);
 
     }
 
-    easyAction = () => {
+    private _easyAction = () => {
         const matrix = this.gridManagerRef.current.matrix;
         let possibleMoves: Vector2[] = [];
 
@@ -35,8 +40,36 @@ class Ai extends Character {
         this.gridManagerRef.current.nextCharacterAction();
     }
 
+    private _mediumAction = () =>{
+
+    }
+
+    private _hardAction = () =>{
+
+    }
+
     destructor(): void {
         clearTimeout(this._actionTimeout);
+    }
+
+    difficulty = () =>{
+        //return this._difficulty;
+    }
+
+    setDifficulty = (difficulty : number) =>{
+        // this._difficulty = difficulty;
+        // if(difficulty === AiDifficulty.EASY){
+        //     this._actionBasedOnDifficulty = this._easyAction;
+        // }
+        // else if(difficulty === AiDifficulty.MEDIUM){
+        //     this._actionBasedOnDifficulty = this._mediumAction;
+        // }
+        // else if(difficulty === AiDifficulty.HARD){
+        //     this._actionBasedOnDifficulty = this._hardAction;
+        // }
+        // else{
+        //     console.log(`!!! INVALID DIFFICULTY ${difficulty} !!!`);
+        // }
     }
 }
 

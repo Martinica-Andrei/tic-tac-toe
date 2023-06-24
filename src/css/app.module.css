@@ -1,14 +1,14 @@
 :root{
-    --red: 160,22,55;
+    --dark-red: 160,22,55;
     --white: 245,245,245;
-    --pink : 215,35,74;
+    --bright-red : 215,35,74;
     --black : 38,34,35;
     --gray: 239, 234, 238;
     --title-color : 247, 47, 86;
 }
 
 body{
-    background-color: rgb(var(--red));
+    background-color: rgb(var(--dark-red));
 }
 
 .title{
@@ -18,11 +18,10 @@ body{
     font-size:60px;
 }
 
-.gameMenu{
+.mainMenu{
     margin: auto;
     background-color: rgb(var(--white));
     width:500px;
-    height:200px;
     padding:15px;
     border-radius:15px;
 }
@@ -31,6 +30,7 @@ body{
     display:block;
     margin:auto;
     margin-top: 15px;
+    margin-bottom: 15px;
     border: none;
     background: none;   
     color: rgb(var(--black));
@@ -38,7 +38,7 @@ body{
 }
 
 .actionButton:hover{
-    color: rgb(var(--pink));
+    color: rgb(var(--bright-red));
     text-decoration:underline;
     cursor: pointer;
 }

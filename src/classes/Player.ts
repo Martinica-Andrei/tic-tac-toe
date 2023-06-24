@@ -1,6 +1,6 @@
 import Character from "./Character";
 import Vector2 from "./Vector2";
-import { IGameContext } from "../context/GameContext";
+import type { IGameContext } from "../context/GameContext";
 import type {IGridManagerPublicData} from "../components/GridManager"
 
 class Player extends Character{
@@ -9,10 +9,10 @@ class Player extends Character{
     }
 
     action() : void {
-        this.gridManagerRef.current.setClickFunc(this.gridClickHandler);
+        this.gridManagerRef.current.setClickFunc(this._gridClickHandler);
     }
 
-    gridClickHandler = (pos : Vector2) =>{
+    private _gridClickHandler = (pos : Vector2) =>{
         const {x, y } = pos;
         this.gridManagerRef.current.setMatrixValue(y, x, this.symbol);
         this.gridManagerRef.current.setClickFunc(() =>{});

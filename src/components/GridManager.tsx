@@ -8,7 +8,7 @@ import {
     doesMatrixHaveValue
 } from '../classes/Utils'
 import GameContext from '../context/GameContext';
-import Vector2 from '../classes/Vector2';
+import type Vector2 from '../classes/Vector2';
 
 // function in a function because i want to pass the return func to setState
 const emptyClickFunc = () => {
@@ -83,9 +83,12 @@ export interface IGridManagerPublicData {
     matrix: IMatrix
 }
 
-const GridManager = () => {
-    const gameContext = useContext(GameContext);
+interface IProps {
 
+}
+
+const GridManager = (props : IProps) => {
+    const gameContext = useContext(GameContext);
     const [matrix, setMatrix] = useReducer(matrixReducer, useMemo(initMatrix, []));
     const [clickFunc, setClickFunc] = useState(emptyClickFunc);
     const [nextCharacterAction, setNextCharacterAction] = useState(false);
@@ -116,9 +119,9 @@ const GridManager = () => {
         let player = new Player(gameContext, gridManagerPublicData);
         let ai = new Ai(gameContext, gridManagerPublicData);
         let characters = [player, ai];
-        player.symbol = 'O';
+        player.symbol = 'X';
         player.name = "Player";
-        ai.symbol = 'X';
+        ai.symbol = 'O';
         ai.name = "AI";
         return characters;
     }

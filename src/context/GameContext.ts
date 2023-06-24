@@ -15,6 +15,6 @@ const GameContext = React.createContext<IGameContext>(
             setPlay: () => { }
         }
     }
-    );
+);
 
 export default GameContext;
