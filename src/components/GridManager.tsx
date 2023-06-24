@@ -2,6 +2,7 @@ import React, { useReducer, useContext, useState, useEffect, useMemo, useRef } f
 import Grid from './Grid';
 import Ai from '../classes/Ai';
 import Player from '../classes/Player';
+import type Character from '../classes/Character';
 import gridCSS from '../css/grid.module.css';
 import {
     isArraySameValue, isMatrixColSameValue, isMatrixLeftToRightDiagonalSameValue, isMatrixRightToLeftDiagonalSameValue,
@@ -84,7 +85,7 @@ export interface IGridManagerPublicData {
 }
 
 interface IProps {
-
+    aiDifficulty: number
 }
 
 const GridManager = (props : IProps) => {
@@ -116,8 +117,9 @@ const GridManager = (props : IProps) => {
     const gridManagerPublicData = useRef(gridManagerPublicDataCopy);
     gridManagerPublicData.current = gridManagerPublicDataCopy;
     const initCharacters = () => {
-        let player = new Player(gameContext, gridManagerPublicData);
-        let ai = new Ai(gameContext, gridManagerPublicData);
+        let player = new Player(gameContext, gridManagerPublicData.current);
+        let ai = new Ai(gameContext, gridManagerPublicData.current);
+        ai.setDifficulty(props.aiDifficulty);
         let characters = [player, ai];
         player.symbol = 'X';
         player.name = "Player";

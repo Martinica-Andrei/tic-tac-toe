@@ -4,19 +4,19 @@ import type { IGameContext } from "../context/GameContext";
 import type {IGridManagerPublicData} from "../components/GridManager"
 
 class Player extends Character{
-    constructor(gameContext : IGameContext, gridManagerRef :React.MutableRefObject<IGridManagerPublicData>){
-        super(gameContext, gridManagerRef);
+    constructor(gameContext : IGameContext, gridManager : IGridManagerPublicData){
+        super(gameContext, gridManager);
     }
 
     action() : void {
-        this.gridManagerRef.current.setClickFunc(this._gridClickHandler);
+        this.gridManager.setClickFunc(this._gridClickHandler);
     }
 
     private _gridClickHandler = (pos : Vector2) =>{
         const {x, y } = pos;
-        this.gridManagerRef.current.setMatrixValue(y, x, this.symbol);
-        this.gridManagerRef.current.setClickFunc(() =>{});
-        this.gridManagerRef.current.nextCharacterAction();
+        this.gridManager.setMatrixValue(y, x, this.symbol);
+        this.gridManager.setClickFunc(() =>{});
+        this.gridManager.nextCharacterAction();
     }
 
     destructor(): void {

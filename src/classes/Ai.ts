@@ -7,23 +7,23 @@ import { AiDifficulty } from "./Constants";
 
 class Ai extends Character {
     private _actionTimeout: number;
-   // private _difficulty : number;
-    //private _actionBasedOnDifficulty : () => void;
-    constructor(gameContext: IGameContext, gridManagerRef: React.MutableRefObject<IGridManagerPublicData>) {
-        super(gameContext, gridManagerRef);
-        //this._difficulty = AiDifficulty.EASY;
-        //this._actionBasedOnDifficulty = this._easyAction;
+    private _difficulty : number;
+    private _actionBasedOnDifficulty : () => void;
+    constructor(gameContext: IGameContext, gridManager: IGridManagerPublicData) {
+        super(gameContext, gridManager);
+        this._difficulty = AiDifficulty.EASY;
+        this._actionBasedOnDifficulty = this._easyAction;
         this._actionTimeout = 0;
     }
 
     action(): void {
         console.log('waht');
-        this._actionTimeout = setTimeout(this._easyAction, 500, []);
+        this._actionTimeout = setTimeout(this._actionBasedOnDifficulty, 500, []);
 
     }
 
     private _easyAction = () => {
-        const matrix = this.gridManagerRef.current.matrix;
+        const matrix = this.gridManager.matrix;
         let possibleMoves: Vector2[] = [];
 
         for (let r = 0; r < matrix.rows; r++) {
@@ -36,8 +36,8 @@ class Ai extends Character {
         if (possibleMoves.length === 0) return;
         shuffleArray(possibleMoves);
         let move = possibleMoves[0];
-        this.gridManagerRef.current.setMatrixValue(move.y, move.x, this.symbol);
-        this.gridManagerRef.current.nextCharacterAction();
+        this.gridManager.setMatrixValue(move.y, move.x, this.symbol);
+        this.gridManager.nextCharacterAction();
     }
 
     private _mediumAction = () =>{
@@ -53,23 +53,23 @@ class Ai extends Character {
     }
 
     difficulty = () =>{
-        //return this._difficulty;
+        return this._difficulty;
     }
 
     setDifficulty = (difficulty : number) =>{
-        // this._difficulty = difficulty;
-        // if(difficulty === AiDifficulty.EASY){
-        //     this._actionBasedOnDifficulty = this._easyAction;
-        // }
-        // else if(difficulty === AiDifficulty.MEDIUM){
-        //     this._actionBasedOnDifficulty = this._mediumAction;
-        // }
-        // else if(difficulty === AiDifficulty.HARD){
-        //     this._actionBasedOnDifficulty = this._hardAction;
-        // }
-        // else{
-        //     console.log(`!!! INVALID DIFFICULTY ${difficulty} !!!`);
-        // }
+        this._difficulty = difficulty;
+        if(difficulty === AiDifficulty.EASY){
+            this._actionBasedOnDifficulty = this._easyAction;
+        }
+        else if(difficulty === AiDifficulty.MEDIUM){
+            this._actionBasedOnDifficulty = this._mediumAction;
+        }
+        else if(difficulty === AiDifficulty.HARD){
+            this._actionBasedOnDifficulty = this._hardAction;
+        }
+        else{
+            console.log(`!!! INVALID DIFFICULTY ${difficulty} !!!`);
+        }
     }
 }
 

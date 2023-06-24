@@ -3,13 +3,13 @@ import type {IGameContext} from "../context/GameContext";
 
 abstract class Character {
     gameContext : IGameContext;
-    gridManagerRef : React.MutableRefObject<IGridManagerPublicData>;
+    gridManager : IGridManagerPublicData;
     symbol: string;
     name : string;
 
-    constructor(gameContext : IGameContext, gridManagerRef : React.MutableRefObject<IGridManagerPublicData>) {
+    constructor(gameContext : IGameContext, gridManager : IGridManagerPublicData) {
         this.gameContext = gameContext;
-        this.gridManagerRef =  gridManagerRef;
+        this.gridManager =  gridManager;
         this.symbol = '';
         this.name = '';
     }
