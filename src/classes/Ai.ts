@@ -142,7 +142,6 @@ class Ai extends Character {
             if(movesWithLossesAndTies[lengthSameLosses] !== movesWithLossesAndTies[lengthSameLosses - 1]) break;
         }
         let move = movesWithLossesAndTies[getRandomInt(0, lengthSameLosses)].move;
-        console.log(movesWithLossesAndTies);
         this.gridManager.setMatrixValue(move.y, move.x, this.symbol);
         this.gridManager.nextCharacterAction();
     }

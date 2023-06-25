@@ -42,4 +42,16 @@
     top:10%;
     transform: translate(-50%, -50%);
     background-color: rgb(var(--red));
+    text-align: center;
 }
+
+.gameOverMessage p{
+    margin:0;
+}
+
+.gameOverMessage button{
+    width:200px;
+    height:50px;
+    font-size:25px;
+}
+

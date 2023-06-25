@@ -1,4 +1,4 @@
-import { useRef } from 'react';
+import { useRef, useState } from 'react';
 import MainMenu from './MainMenu';
 import GridManager from './GridManager';
 import GameContext, { IGameContext } from '../context/GameContext';
@@ -9,14 +9,17 @@ const IS_MAIN_MENU_STATE = 0;
 const IS_PLAY_STATE = 1;
 
 const Game = () => {
-
     const [gameState, setMainMenu, setPlay] = useEnumState(IS_MAIN_MENU_STATE, IS_PLAY_STATE);
+    const [key, setKey] = useState(0);
     const options = useRef(new GameOptions());
 
     const gameContextValue: IGameContext = {
         state: {
             setMainMenu: setMainMenu,
-            setPlay: setPlay
+            setPlay: () =>{
+                setKey(prevKey => prevKey + 1);
+                setPlay();
+            }
         },
         options : options.current
 
@@ -24,10 +27,10 @@ const Game = () => {
 
     return (
         <GameContext.Provider value={gameContextValue}>
-            <div>
+            <>
                 {gameState === IS_MAIN_MENU_STATE && <MainMenu />}
-                {gameState === IS_PLAY_STATE && <GridManager aiDifficulty={options.current.aiDifficulty} />}
-            </div>
+                {gameState === IS_PLAY_STATE && <GridManager key={key} aiDifficulty={options.current.aiDifficulty} />}
+            </>
         </GameContext.Provider>
     );
 };

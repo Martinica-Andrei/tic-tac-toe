@@ -169,7 +169,10 @@ const GridManager = (props : IProps) => {
         let message = winner !== undefined ? `Winner : ${winner.name}` : "TIE";
         return (
             <>
-                <div className={gridCSS.gameOverMessage}>{message}</div>
+                <div className={gridCSS.gameOverMessage}>
+                    <p>{message}</p>
+                    <button onClick={gameContext.state.setPlay}>Play again</button>
+                </div>
             </>
         );
 
