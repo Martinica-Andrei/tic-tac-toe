@@ -6,12 +6,14 @@ abstract class Character {
     gridManager : IGridManagerPublicData;
     symbol: string;
     name : string;
+    opponent : Character
 
     constructor(gameContext : IGameContext, gridManager : IGridManagerPublicData) {
         this.gameContext = gameContext;
         this.gridManager =  gridManager;
         this.symbol = '';
         this.name = '';
+        this.opponent = this;
     }
 
     abstract action() : void;

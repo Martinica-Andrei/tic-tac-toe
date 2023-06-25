@@ -6,7 +6,8 @@ import type Character from '../classes/Character';
 import gridCSS from '../css/grid.module.css';
 import {
     isArraySameValue, isMatrixColSameValue, isMatrixLeftToRightDiagonalSameValue, isMatrixRightToLeftDiagonalSameValue,
-    doesMatrixHaveValue
+    doesMatrixHaveValue,
+    getRandomInt
 } from '../classes/Utils'
 import GameContext from '../context/GameContext';
 import type Vector2 from '../classes/Vector2';
@@ -18,7 +19,7 @@ const emptyClickFunc = () => {
     };
 }
 
-interface IMatrix {
+export interface IMatrix {
     rows: number,
     cols: number;
     data: string[][]
@@ -125,11 +126,13 @@ const GridManager = (props : IProps) => {
         player.name = "Player";
         ai.symbol = 'O';
         ai.name = "AI";
+        player.opponent = ai;
+        ai.opponent = player;
         return characters;
     }
 
     const characters = useRef(useMemo(initCharacters, []));
-    const currentCharacterIndex = useRef(-1);
+    const currentCharacterIndex = useRef(getRandomInt(-1, 1));
     const [isGameOverState, setGameOverState] = useState('');
 
     useEffect(() => {
@@ -142,7 +145,7 @@ const GridManager = (props : IProps) => {
     }, []);
 
     const characterAction = () => {
-        var _isGameOver = isGameOver();
+        var _isGameOver = isGameOver(matrix);
         if (_isGameOver.length > 0) {
             setGameOverState(_isGameOver);
             return;
@@ -158,28 +161,6 @@ const GridManager = (props : IProps) => {
         characterAction();
     }, [nextCharacterAction]);
 
-
-    const isGameOver = (): string => {
-        for (let i = 0; i < matrix.rows; i++) {
-            if (matrix.data[i][0].length && isArraySameValue(matrix.data[i])) {
-                return matrix.data[i][0];
-            }
-            if (matrix.data[0][i].length && isMatrixColSameValue(matrix.data, i)) {
-                return matrix.data[0][i];
-            }
-        }
-        if (matrix.data[0][0].length && isMatrixLeftToRightDiagonalSameValue(matrix.data)) {
-            return matrix.data[0][0];
-        }
-        if (matrix.data[0][matrix.cols - 1] && isMatrixRightToLeftDiagonalSameValue(matrix.data)) {
-            return matrix.data[0][matrix.rows - 1];
-        }
-        if (matrix.data[0][0].length && doesMatrixHaveValue(matrix.data, '') === false) {
-            return 'tie'
-        }
-        return '';
-    }
-
     const gameOverDiv = (): JSX.Element | undefined => {
         if (isGameOverState.length === 0) {
             return undefined;
@@ -194,8 +175,6 @@ const GridManager = (props : IProps) => {
 
     }
 
-
-
     return (
         <div>
             <button style={{ width: "200px", height: "70px", fontSize: "30px" }} onClick={gameContext.state.setMainMenu}>Main Menu</button>
@@ -204,8 +183,27 @@ const GridManager = (props : IProps) => {
         </div>
     );
 
-
-
 };
+
+export const isGameOver = (matrix : IMatrix): string => {
+    for (let i = 0; i < matrix.rows; i++) {
+        if (matrix.data[i][0].length && isArraySameValue(matrix.data[i])) {
+            return matrix.data[i][0];
+        }
+        if (matrix.data[0][i].length && isMatrixColSameValue(matrix.data, i)) {
+            return matrix.data[0][i];
+        }
+    }
+    if (matrix.data[0][0].length && isMatrixLeftToRightDiagonalSameValue(matrix.data)) {
+        return matrix.data[0][0];
+    }
+    if (matrix.data[0][matrix.cols - 1] && isMatrixRightToLeftDiagonalSameValue(matrix.data)) {
+        return matrix.data[0][matrix.rows - 1];
+    }
+    if (matrix.data[0][0].length && doesMatrixHaveValue(matrix.data, '') === false) {
+        return 'tie'
+    }
+    return '';
+}
 
 export default GridManager;
