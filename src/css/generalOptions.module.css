@@ -1,0 +1,21 @@
+.playerSymbolDiv {
+    display: flex;
+    justify-content: center;
+    align-items: end;
+}
+
+.playerSymbolDiv * {
+    font-size: 20px;
+}
+
+.playerSymbolDiv input{
+    width:20px;
+    height: 20px;
+}
+
+.playerSymbolDiv>div>div {
+    display: inline-flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}

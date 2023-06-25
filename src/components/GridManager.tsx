@@ -122,9 +122,9 @@ const GridManager = (props : IProps) => {
         let ai = new Ai(gameContext, gridManagerPublicData.current);
         ai.setDifficulty(props.aiDifficulty);
         let characters = [player, ai];
-        player.symbol = 'X';
+        player.symbol = gameContext.options.playerSymbol;
         player.name = "Player";
-        ai.symbol = 'O';
+        ai.symbol = player.symbol === 'X' ? 'O' : 'X';
         ai.name = "AI";
         player.opponent = ai;
         ai.opponent = player;

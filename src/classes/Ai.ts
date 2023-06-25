@@ -89,23 +89,28 @@ class Ai extends Character {
         this.gridManager.nextCharacterAction();
     }
 
-    private _getLosses(matrix: IMatrix, isOpponentMove: boolean) {
-        if (doesMatrixHaveValue(matrix.data, '') === false) {
-            return 0;
-        }
+    private _getLossesAndTies(matrix: IMatrix, isOpponentMove: boolean) : Vector2 {
+        let lossesAndTies = new Vector2(0,0);
         const isGameOverValue = isGameOver(matrix);
         if (isGameOverValue) {
-            return Number(isGameOverValue === this.opponent.symbol);
+            if(isGameOverValue === this.opponent.symbol){
+                lossesAndTies.x++;
+            }
+            else if(isGameOverValue === 'tie'){
+                lossesAndTies.y++;
+            }
+            return lossesAndTies;
         }
         const possibleMoves = this._getPossibleMoves(matrix);
         const symbol = isOpponentMove ? this.opponent.symbol : this.symbol;
-        let losses = 0;
         for (const move of possibleMoves) {
             matrix.data[move.y][move.x] = symbol;
-            losses += this._getLosses(matrix, !isOpponentMove);
+            const moveLossesAndTies = this._getLossesAndTies(matrix, !isOpponentMove);
+            lossesAndTies.x += moveLossesAndTies.x;
+            lossesAndTies.y += moveLossesAndTies.y;
             matrix.data[move.y][move.x] = '';
         }
-        return losses;
+        return lossesAndTies;
     }
 
     private _hardAction = () => {
@@ -116,22 +121,28 @@ class Ai extends Character {
         const possibleMoves = this._getPossibleMoves(this.gridManager.matrix);
         if(possibleMoves.length === 0) return;
         let matrix = this.gridManager.matrix;
-        let losses = [];
+        let lossesAndTies = [];
         for (const move of possibleMoves) {
             matrix.data[move.y][move.x] = this.symbol;
-            losses.push(this._getLosses(matrix, true));
+            lossesAndTies.push(this._getLossesAndTies(matrix, true));
             matrix.data[move.y][move.x] = '';
         }
-        let movesWithLoses = [];
+        let movesWithLossesAndTies = [];
         for (let i = 0; i < possibleMoves.length; i++) {
-            movesWithLoses.push({losses : losses[i], move : possibleMoves[i]});
+            movesWithLossesAndTies.push({score : lossesAndTies[i], move : possibleMoves[i]});
         }
-        movesWithLoses.sort((a, b) => a.losses - b.losses);
+        movesWithLossesAndTies.sort((a, b) => {
+            if(a.score.x === b.score.x){
+                return a.score.y - b.score.y;
+            }
+            return a.score.x - b.score.x;
+        });
         let lengthSameLosses = 1;
-        for(; lengthSameLosses < movesWithLoses.length; lengthSameLosses++){
-            if(movesWithLoses[lengthSameLosses] !== movesWithLoses[lengthSameLosses - 1]) break;
+        for(; lengthSameLosses < movesWithLossesAndTies.length; lengthSameLosses++){
+            if(movesWithLossesAndTies[lengthSameLosses] !== movesWithLossesAndTies[lengthSameLosses - 1]) break;
         }
-        let move = movesWithLoses[getRandomInt(0, lengthSameLosses)].move;
+        let move = movesWithLossesAndTies[getRandomInt(0, lengthSameLosses)].move;
+        console.log(movesWithLossesAndTies);
         this.gridManager.setMatrixValue(move.y, move.x, this.symbol);
         this.gridManager.nextCharacterAction();
     }
