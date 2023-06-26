@@ -15,12 +15,12 @@ const Grid = (props: IProps) => {
     let rows = [];
     const cellWidth = `${100 / props.cols}%`;
     const cellHeight = `${100 / props.rows}%`;
-    const style = {width : cellWidth, height: cellHeight};
+    const style = { width: cellWidth, height: cellHeight };
     for (let r = 0; r < props.rows; r++) {
         let cells = [];
         for (let c = 0; c < props.cols; c++) {
-            cells.push(<Cell key={c} pos={new Vector2(c, r)} clickFunc={props.clickFunc} className={gridCSS.cell}
-            style={style}>{props.matrix[r][c]}</Cell>)
+            cells.push(<Cell key={c} pos={new Vector2(c, r)} clickFunc={props.clickFunc}
+                style={style}>{props.matrix[r][c]}</Cell>)
         }
         rows.push(<tr key={r}>{cells}</tr>)
     }
