@@ -9,7 +9,7 @@ class Ai extends Character {
     private _actionTimeout: NodeJS.Timeout | undefined;
     private _difficulty: number;
     private _actionBasedOnDifficulty: (possibleMoves: Vector2[]) => void;
-    constructor(gameContext: IGameContext, gridManager: IGridManagerPublicData) {
+    constructor(gameContext: IGameContext, gridManager: React.MutableRefObject<IGridManagerPublicData>) {
         super(gameContext, gridManager);
         this._difficulty = AiDifficulty.EASY;
         this._actionBasedOnDifficulty = this._easyAction;
@@ -17,15 +17,16 @@ class Ai extends Character {
     }
 
     action(): void {
-        const possibleMoves = this._getPossibleMoves(this.gridManager.matrix);
+        console.log(this.gridManager.current.matrix);
+        const possibleMoves = this._getPossibleMoves(this.gridManager.current.matrix);
         if (possibleMoves.length === 0) return;
         this._actionTimeout = setTimeout(this._actionBasedOnDifficulty, 0, possibleMoves);
 
     }
 
     private _doMove(move: Vector2) {
-        this.gridManager.setMatrixValue(move.y, move.x, this.symbol);
-        this.gridManager.nextCharacterAction();
+        this.gridManager.current.setMatrixValue(move.y, move.x, this.symbol);
+        this.gridManager.current.nextCharacterAction();
     }
 
     private _doMoveIfWinningMove(possibleMoves: Vector2[]) {
@@ -55,7 +56,7 @@ class Ai extends Character {
     private _getPossibleMoves(matrix: IMatrix) {
         let possibleMoves: Vector2[] = [];
 
-        for (let r = 0; r < this.gridManager.matrix.rows; r++) {
+        for (let r = 0; r < this.gridManager.current.matrix.rows; r++) {
             for (let c = 0; c < matrix.cols; c++) {
                 if (matrix.data[r][c].length === 0) {
                     possibleMoves.push(new Vector2(c, r));
@@ -66,7 +67,7 @@ class Ai extends Character {
     }
 
     private _isWinningMove(possibleMoves: Vector2[], symbol: string) {
-        const matrix = this.gridManager.matrix;
+        const matrix = this.gridManager.current.matrix;
         for (const move of possibleMoves) {
             matrix.data[move.y][move.x] = symbol;
             const isGameOverValue = isGameOver(matrix);
@@ -80,14 +81,14 @@ class Ai extends Character {
 
     private _isFirstMove() {
         let count = 0;
-        for (const row of this.gridManager.matrix.data) {
+        for (const row of this.gridManager.current.matrix.data) {
             for (const cell of row) {
                 if (cell === '') {
                     count++;
                 }
             }
         }
-        return (count === this.gridManager.matrix.rows * this.gridManager.matrix.cols);
+        return (count === this.gridManager.current.matrix.rows * this.gridManager.current.matrix.cols);
     }
 
     private _easyAction = (possibleMoves: Vector2[]) => {
@@ -128,7 +129,7 @@ class Ai extends Character {
         else if (this._doMoveIfOpponentWinningMove(possibleMoves)) {
             return;
         }
-        let matrix = this.gridManager.matrix;
+        let matrix = this.gridManager.current.matrix;
         let lossesAndTies = [];
         for (const move of possibleMoves) {
             matrix.data[move.y][move.x] = this.symbol;

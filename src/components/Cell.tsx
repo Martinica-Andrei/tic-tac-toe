@@ -5,10 +5,11 @@ interface IProps {
     className?: string;
     children: string;
     pos: Vector2;
-    clickFunc: (pos : Vector2) => void;
+    clickFunc: (pos: Vector2) => void;
+    style? : React.CSSProperties
 }
 
-const Cell = (props: IProps) =>{
+const Cell = (props: IProps) => {
 
 
     const clickHandler = () => {
@@ -18,7 +19,11 @@ const Cell = (props: IProps) =>{
     };
 
     return (
-        <div className={`${props.className} noSelect`} onClick={clickHandler}>{props.children}</div>
+        <td className={`${props.className} noSelect`} onClick={clickHandler} style={props.style}>
+            <p>
+                {props.children}
+            </p>
+        </td>
     );
 
 

@@ -1,7 +1,7 @@
 import { useContext } from 'react';
 import appCSS from '../css/app.module.css'
+import leaderboardCSS from '../css/leaderboard.module.css'
 import GameContext from '../context/GameContext';
-
 interface IProps {
     setMainMenuPage: () => void;
 }
@@ -11,7 +11,7 @@ const Leaderboard = (props: IProps) => {
     const gameContext = useContext(GameContext);
     const difficulties = ["Easy", "Medium", "Hard", "Impossible"]
     const htmlRows = gameContext.aiScore.difficulties.map((difficulty, index) => (
-        <tr key={index}>
+        <tr className={leaderboardCSS.row} key={index}>
             <td>{difficulties[index]}</td>
             <td>{difficulty.wins}</td>
             <td>{difficulty.losses}</td>

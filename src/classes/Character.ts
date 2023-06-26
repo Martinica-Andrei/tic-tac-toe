@@ -3,12 +3,12 @@ import type {IGameContext} from "../context/GameContext";
 
 abstract class Character {
     gameContext : IGameContext;
-    gridManager : IGridManagerPublicData;
+    gridManager : React.MutableRefObject<IGridManagerPublicData>;
     symbol: string;
     name : string;
     opponent : Character
 
-    constructor(gameContext : IGameContext, gridManager : IGridManagerPublicData) {
+    constructor(gameContext : IGameContext, gridManager : React.MutableRefObject<IGridManagerPublicData>) {
         this.gameContext = gameContext;
         this.gridManager =  gridManager;
         this.symbol = '';

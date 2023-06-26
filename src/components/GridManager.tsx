@@ -106,7 +106,6 @@ const GridManager = (props: IProps) => {
     const nextCharacterActionWrapper = () => {
         setNextCharacterAction(prev => !prev);
     }
-
     const gridManagerPublicDataCopy: IGridManagerPublicData = {
         setMatrixValue: setMatrixValue,
         setClickFunc: setClickFuncWrapper,
@@ -118,8 +117,8 @@ const GridManager = (props: IProps) => {
     const gridManagerPublicData = useRef(gridManagerPublicDataCopy);
     gridManagerPublicData.current = gridManagerPublicDataCopy;
     const initCharacters = () => {
-        let player = new Player(gameContext, gridManagerPublicData.current);
-        let ai = new Ai(gameContext, gridManagerPublicData.current);
+        let player = new Player(gameContext, gridManagerPublicData);
+        let ai = new Ai(gameContext, gridManagerPublicData);
         ai.setDifficulty(props.aiDifficulty);
         let characters = [player, ai];
         player.symbol = gameContext.options.playerSymbol;
