@@ -6,19 +6,50 @@ import { isGameOver, type IGridManagerPublicData, type IMatrix } from "../compon
 import { AiDifficulty } from "./Constants";
 
 class Ai extends Character {
-    private _actionTimeout: number;
+    private _actionTimeout: NodeJS.Timeout | undefined;
     private _difficulty: number;
-    private _actionBasedOnDifficulty: () => void;
+    private _actionBasedOnDifficulty: (possibleMoves: Vector2[]) => void;
     constructor(gameContext: IGameContext, gridManager: IGridManagerPublicData) {
         super(gameContext, gridManager);
         this._difficulty = AiDifficulty.EASY;
         this._actionBasedOnDifficulty = this._easyAction;
-        this._actionTimeout = 0;
+        this._actionTimeout = undefined;
     }
 
     action(): void {
-        this._actionTimeout = setTimeout(this._actionBasedOnDifficulty, 0, []);
+        const possibleMoves = this._getPossibleMoves(this.gridManager.matrix);
+        if (possibleMoves.length === 0) return;
+        this._actionTimeout = setTimeout(this._actionBasedOnDifficulty, 0, possibleMoves);
 
+    }
+
+    private _doMove(move: Vector2) {
+        this.gridManager.setMatrixValue(move.y, move.x, this.symbol);
+        this.gridManager.nextCharacterAction();
+    }
+
+    private _doMoveIfWinningMove(possibleMoves: Vector2[]) {
+        const move = this._isWinningMove(possibleMoves, this.symbol);
+        if (move) {
+            this._doMove(move);
+            return true;
+        }
+        return false;
+    }
+
+    private _doMoveIfOpponentWinningMove(possibleMoves: Vector2[]) {
+        const move = this._isWinningMove(possibleMoves, this.opponent.symbol);
+        if (move) {
+            this._doMove(move);
+            return true;
+        }
+        return false;
+    }
+
+    private _doRandomMove(possibleMoves: Vector2[]) {
+        shuffleArray(possibleMoves);
+        const move = possibleMoves[0];
+        this._doMove(move);
     }
 
     private _getPossibleMoves(matrix: IMatrix) {
@@ -59,44 +90,80 @@ class Ai extends Character {
         return (count === this.gridManager.matrix.rows * this.gridManager.matrix.cols);
     }
 
-    private _easyAction = () => {
-        const possibleMoves: Vector2[] = this._getPossibleMoves(this.gridManager.matrix);
-        if (possibleMoves.length === 0) return;
-        shuffleArray(possibleMoves);
-        let move = possibleMoves[0];
-        this.gridManager.setMatrixValue(move.y, move.x, this.symbol);
-        this.gridManager.nextCharacterAction();
+    private _easyAction = (possibleMoves: Vector2[]) => {
+        this._doRandomMove(possibleMoves);
     }
 
-    private _mediumAction = () => {
-        const possibleMoves: Vector2[] = this._getPossibleMoves(this.gridManager.matrix);
-        if (possibleMoves.length === 0) return;
-        const winningMove = this._isWinningMove(possibleMoves, this.symbol);
-        if (winningMove) {
-            this.gridManager.setMatrixValue(winningMove.y, winningMove.x, this.symbol);
-            this.gridManager.nextCharacterAction();
-            return;
+    private _mediumAction = (possibleMoves: Vector2[]) => {
+        const doPredictedMove = getRandomInt(0, 3) <= 1;
+        if (doPredictedMove) {
+            if (this._doMoveIfWinningMove(possibleMoves)) {
+                return;
+            }
+            else if (this._doMoveIfOpponentWinningMove(possibleMoves)) {
+                return;
+            }
         }
-        const opponentWinningMove = this._isWinningMove(possibleMoves, this.opponent.symbol);
-        if (opponentWinningMove) {
-            this.gridManager.setMatrixValue(opponentWinningMove.y, opponentWinningMove.x, this.symbol);
-            this.gridManager.nextCharacterAction();
-            return;
-        }
-        shuffleArray(possibleMoves);
-        let move = possibleMoves[0];
-        this.gridManager.setMatrixValue(move.y, move.x, this.symbol);
-        this.gridManager.nextCharacterAction();
+        this._doRandomMove(possibleMoves);
     }
 
-    private _getLossesAndTies(matrix: IMatrix, isOpponentMove: boolean) : Vector2 {
-        let lossesAndTies = new Vector2(0,0);
+    private _hardAction = (possibleMoves: Vector2[]) => {
+        if (this._doMoveIfWinningMove(possibleMoves)) {
+            return;
+        }
+        else if (this._doMoveIfOpponentWinningMove(possibleMoves)) {
+            return;
+        }
+        this._doRandomMove(possibleMoves);
+    }
+
+    private _impossibleAction = (possibleMoves: Vector2[]) => {
+        if (this._isFirstMove()) {
+            this._doRandomMove(possibleMoves);
+            return;
+        }
+        if (this._doMoveIfWinningMove(possibleMoves)) {
+            return;
+        }
+        else if (this._doMoveIfOpponentWinningMove(possibleMoves)) {
+            return;
+        }
+        let matrix = this.gridManager.matrix;
+        let lossesAndTies = [];
+        for (const move of possibleMoves) {
+            matrix.data[move.y][move.x] = this.symbol;
+            lossesAndTies.push(this._getLossesAndTies(matrix, true));
+            matrix.data[move.y][move.x] = '';
+        }
+        let movesWithLossesAndTies = [];
+        for (let i = 0; i < possibleMoves.length; i++) {
+            movesWithLossesAndTies.push({ score: lossesAndTies[i], move: possibleMoves[i] });
+        }
+        movesWithLossesAndTies.sort((a, b) => {
+            if (a.score.x === b.score.x) {
+                return a.score.y - b.score.y;
+            }
+            return a.score.x - b.score.x;
+        });
+        let lengthSameLosses = 1;
+        for (; lengthSameLosses < movesWithLossesAndTies.length; lengthSameLosses++) {
+            const firstScore = movesWithLossesAndTies[lengthSameLosses].score;
+            const secondScore = movesWithLossesAndTies[lengthSameLosses - 1].score;
+            if (firstScore.x !== secondScore.x || firstScore.y !== secondScore.y) break;
+        }
+        let move = movesWithLossesAndTies[getRandomInt(0, lengthSameLosses)].move;
+        this._doMove(move);
+    }
+
+    // Vector2 x is losses and y is ties
+    private _getLossesAndTies(matrix: IMatrix, isOpponentMove: boolean): Vector2 {
+        let lossesAndTies = new Vector2(0, 0);
         const isGameOverValue = isGameOver(matrix);
         if (isGameOverValue) {
-            if(isGameOverValue === this.opponent.symbol){
+            if (isGameOverValue === this.opponent.symbol) {
                 lossesAndTies.x++;
             }
-            else if(isGameOverValue === 'tie'){
+            else if (isGameOverValue === 'tie') {
                 lossesAndTies.y++;
             }
             return lossesAndTies;
@@ -111,39 +178,6 @@ class Ai extends Character {
             matrix.data[move.y][move.x] = '';
         }
         return lossesAndTies;
-    }
-
-    private _hardAction = () => {
-        if(this._isFirstMove()){
-            this._easyAction();
-            return;
-        }
-        const possibleMoves = this._getPossibleMoves(this.gridManager.matrix);
-        if(possibleMoves.length === 0) return;
-        let matrix = this.gridManager.matrix;
-        let lossesAndTies = [];
-        for (const move of possibleMoves) {
-            matrix.data[move.y][move.x] = this.symbol;
-            lossesAndTies.push(this._getLossesAndTies(matrix, true));
-            matrix.data[move.y][move.x] = '';
-        }
-        let movesWithLossesAndTies = [];
-        for (let i = 0; i < possibleMoves.length; i++) {
-            movesWithLossesAndTies.push({score : lossesAndTies[i], move : possibleMoves[i]});
-        }
-        movesWithLossesAndTies.sort((a, b) => {
-            if(a.score.x === b.score.x){
-                return a.score.y - b.score.y;
-            }
-            return a.score.x - b.score.x;
-        });
-        let lengthSameLosses = 1;
-        for(; lengthSameLosses < movesWithLossesAndTies.length; lengthSameLosses++){
-            if(movesWithLossesAndTies[lengthSameLosses] !== movesWithLossesAndTies[lengthSameLosses - 1]) break;
-        }
-        let move = movesWithLossesAndTies[getRandomInt(0, lengthSameLosses)].move;
-        this.gridManager.setMatrixValue(move.y, move.x, this.symbol);
-        this.gridManager.nextCharacterAction();
     }
 
     destructor(): void {
@@ -164,6 +198,9 @@ class Ai extends Character {
         }
         else if (difficulty === AiDifficulty.HARD) {
             this._actionBasedOnDifficulty = this._hardAction;
+        }
+        else if (difficulty === AiDifficulty.IMPOSSIBLE) {
+            this._actionBasedOnDifficulty = this._impossibleAction;
         }
         else {
             console.log(`!!! INVALID DIFFICULTY ${difficulty} !!!`);

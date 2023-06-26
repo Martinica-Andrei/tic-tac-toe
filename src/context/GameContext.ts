@@ -1,5 +1,6 @@
 import React from "react";
 import GameOptions from "../classes/GameOptions";
+import AiScore from "../classes/AiScore";
 
 export interface IGameContext {
     state: {
@@ -7,6 +8,7 @@ export interface IGameContext {
         setPlay: () => void;
     };
     options : GameOptions;
+    aiScore : AiScore;
 }
 
 const GameContext = React.createContext<IGameContext>(
@@ -16,7 +18,8 @@ const GameContext = React.createContext<IGameContext>(
             setMainMenu: () => { },
             setPlay: () => { }
         },
-        options : new GameOptions()
+        options : new GameOptions(),
+        aiScore : new AiScore()
     }
 );
 

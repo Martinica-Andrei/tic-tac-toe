@@ -89,7 +89,7 @@ interface IProps {
     aiDifficulty: number
 }
 
-const GridManager = (props : IProps) => {
+const GridManager = (props: IProps) => {
     const gameContext = useContext(GameContext);
     const [matrix, setMatrix] = useReducer(matrixReducer, useMemo(initMatrix, []));
     const [clickFunc, setClickFunc] = useState(emptyClickFunc);
@@ -144,10 +144,29 @@ const GridManager = (props : IProps) => {
 
     }, []);
 
+
+    const setGameOver = (gameOverValue : string) => {
+        const difficultyScore = gameContext.aiScore.difficulties[gameContext.options.aiDifficulty];
+        if(gameOverValue === 'tie'){
+            difficultyScore.ties++;
+        }
+        else{
+            const winner = characters.current.find(c => c.symbol === gameOverValue);
+            if(winner instanceof Player){
+                difficultyScore.wins++;
+            }
+            else{
+                difficultyScore.losses++;
+            }
+        }
+        setGameOverState(gameOverValue);
+    }
+
+
     const characterAction = () => {
         var _isGameOver = isGameOver(matrix);
         if (_isGameOver.length > 0) {
-            setGameOverState(_isGameOver);
+            setGameOver(_isGameOver);
             return;
         }
         currentCharacterIndex.current++;
@@ -188,7 +207,7 @@ const GridManager = (props : IProps) => {
 
 };
 
-export const isGameOver = (matrix : IMatrix): string => {
+export const isGameOver = (matrix: IMatrix): string => {
     for (let i = 0; i < matrix.rows; i++) {
         if (matrix.data[i][0].length && isArraySameValue(matrix.data[i])) {
             return matrix.data[i][0];

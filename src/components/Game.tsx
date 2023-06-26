@@ -4,6 +4,7 @@ import GridManager from './GridManager';
 import GameContext, { IGameContext } from '../context/GameContext';
 import useEnumState from '../hooks/useEnumState';
 import GameOptions from '../classes/GameOptions';
+import AiScore from '../classes/AiScore';
 
 const IS_MAIN_MENU_STATE = 0;
 const IS_PLAY_STATE = 1;
@@ -12,6 +13,7 @@ const Game = () => {
     const [gameState, setMainMenu, setPlay] = useEnumState(IS_MAIN_MENU_STATE, IS_PLAY_STATE);
     const [key, setKey] = useState(0);
     const options = useRef(new GameOptions());
+    const aiScore = useRef(new AiScore());
 
     const gameContextValue: IGameContext = {
         state: {
@@ -21,8 +23,8 @@ const Game = () => {
                 setPlay();
             }
         },
-        options : options.current
-
+        options : options.current,
+        aiScore : aiScore.current
     }
 
     return (

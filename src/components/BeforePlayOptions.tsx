@@ -4,15 +4,14 @@ import GameContext from '../context/GameContext';
 import { AiDifficulty } from '../classes/Constants';
 import useEnumState from '../hooks/useEnumState';
 
-
-
 interface IProps {
     setMainMenuPage: () => void;
 }
 
 const BeforePlayOptions = (props: IProps) => {
 
-    const [difficulty, , setEasy, setMedium, setHard] = useEnumState(AiDifficulty.NO_DIFFICULTY, AiDifficulty.EASY, AiDifficulty.MEDIUM, AiDifficulty.HARD);
+    const [difficulty, , setEasy, setMedium, setHard, setImpossible] = useEnumState(AiDifficulty.NO_DIFFICULTY, AiDifficulty.EASY,
+        AiDifficulty.MEDIUM, AiDifficulty.HARD, AiDifficulty.IMPOSSIBLE);
     const gameContext = useContext(GameContext);
 
     useEffect(() => {
@@ -27,6 +26,7 @@ const BeforePlayOptions = (props: IProps) => {
             <button className={appCSS.actionButton} onClick={setEasy}>Easy</button>
             <button className={appCSS.actionButton} onClick={setMedium}>Medium</button>
             <button className={appCSS.actionButton} onClick={setHard}>Hard</button>
+            <button className={appCSS.actionButton} onClick={setImpossible}>Impossible</button>
             <button className={appCSS.actionButton} onClick={props.setMainMenuPage}>Back</button>
         </>
     )

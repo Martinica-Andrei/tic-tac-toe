@@ -1,44 +1,50 @@
-:root{
-    --dark-red: 160,22,55;
-    --white: 245,245,245;
-    --bright-red : 215,35,74;
-    --black : 38,34,35;
+:root {
+    --dark-red: 160, 22, 55;
+    --white: 245, 245, 245;
+    --bright-red: 215, 35, 74;
+    --black: 38, 34, 35;
     --gray: 239, 234, 238;
-    --title-color : 247, 47, 86;
+    --title-color: 247, 47, 86;
 }
 
-body{
+body {
     background-color: rgb(var(--dark-red));
 }
 
-.title{
+.title {
     color: rgb(var(--title-color));
-    text-align:center;
-    margin-top:50px;
-    font-size:60px;
+    text-align: center;
+    margin-top: 50px;
+    font-size: 60px;
 }
 
-.mainMenu{
+.mainMenu {
     margin: auto;
     background-color: rgb(var(--white));
-    width:500px;
-    padding:15px;
-    border-radius:15px;
+    width: 500px;
+    padding: 15px;
+    border-radius: 15px;
 }
 
-.actionButton{
-    display:block;
-    margin:auto;
+.actionButton {
+    display: block;
+    margin: auto;
     margin-top: 15px;
     margin-bottom: 15px;
     border: none;
-    background: none;   
+    background: none;
     color: rgb(var(--black));
-    font-size:30px;
+    font-size: 30px;
 }
 
-.actionButton:hover{
+.actionButton:hover {
     color: rgb(var(--bright-red));
-    text-decoration:underline;
+    text-decoration: underline;
     cursor: pointer;
+}
+
+table,
+th,
+td {
+    text-align: center;
 }
