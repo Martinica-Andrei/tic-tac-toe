@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-const useEnumState = (...values : any[]) => {
+const useEnumState = <T,>(...values : T[]) : [T, ...(() => void)[]] => {
     const [state, setState] = useState(values[0]);
 
     let funcs : (() => void)[] = [];

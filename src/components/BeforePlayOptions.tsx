@@ -16,7 +16,7 @@ const BeforePlayOptions = (props: IProps) => {
 
     useEffect(() => {
         if (difficulty !== AiDifficulty.NO_DIFFICULTY) {
-            gameContext.options.aiDifficulty = difficulty;
+            gameContext.options.data.aiDifficulty = difficulty;
             gameContext.state.setPlay();
         }
     }, [difficulty]);

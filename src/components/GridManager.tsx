@@ -121,7 +121,7 @@ const GridManager = (props: IProps) => {
         let ai = new Ai(gameContext, gridManagerPublicData);
         ai.setDifficulty(props.aiDifficulty);
         let characters = [player, ai];
-        player.symbol = gameContext.options.playerSymbol;
+        player.symbol = gameContext.options.data.playerSymbol;
         player.name = "Player";
         ai.symbol = player.symbol === 'X' ? 'O' : 'X';
         ai.name = "AI";
@@ -145,7 +145,7 @@ const GridManager = (props: IProps) => {
 
 
     const setGameOver = (gameOverValue : string) => {
-        const difficultyScore = gameContext.aiScore.difficulties[gameContext.options.aiDifficulty];
+        const difficultyScore = gameContext.aiScore.data.difficulties[gameContext.options.data.aiDifficulty];
         if(gameOverValue === 'tie'){
             difficultyScore.ties++;
         }
@@ -158,6 +158,7 @@ const GridManager = (props: IProps) => {
                 difficultyScore.losses++;
             }
         }
+        gameContext.aiScore.updateLocalStorage();
         setGameOverState(gameOverValue);
     }
 

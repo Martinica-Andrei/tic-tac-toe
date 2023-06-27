@@ -26,6 +26,48 @@ body {
     border-radius: 15px;
 }
 
+
+
+@keyframes fadeAnim {
+    from {
+        opacity: 1;
+    }
+
+    to {
+        opacity: 0;
+        transform: translate(var(--x), var(--y));
+    }
+}
+
+.playFadeRight {
+    --x: 300px;
+    --y: 0px;
+    animation-name: fadeAnim;
+    animation-duration: 1s;
+    animation-fill-mode: forwards;
+    pointer-events:none;
+
+}
+
+.playFadeLeft {
+    --x:-300px;
+    --y: 0px;
+    animation-name: fadeAnim;
+    animation-duration: 1s;
+    animation-fill-mode: forwards;
+    pointer-events:none;
+}
+
+.playFade{
+    --x: 0px;
+    --y: 0px;
+    animation-name: fadeAnim;
+    animation-duration: 1s;
+    animation-fill-mode: forwards;
+    pointer-events:none;
+}
+
+
 .actionButton {
     display: block;
     margin: auto;
@@ -42,9 +84,3 @@ body {
     text-decoration: underline;
     cursor: pointer;
 }
-
-/* table,
-th,
-td {
-    text-align: center;
-} */

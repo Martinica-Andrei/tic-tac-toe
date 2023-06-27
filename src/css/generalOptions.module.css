@@ -1,11 +1,7 @@
 .playerSymbolDiv {
     display: flex;
-    justify-content: center;
+    justify-content: space-between;
     align-items: end;
-}
-
-.playerSymbolDiv * {
-    font-size: 20px;
 }
 
 .playerSymbolDiv input{
@@ -18,4 +14,18 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
+}
+
+.symbolAnimationToggleDiv{
+    display:flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.symbolAnimationToggleDiv input{
+    width:20px;
+    height: 20px;
+}
+
+.generalOptions *{
+    font-size:25px;
 }

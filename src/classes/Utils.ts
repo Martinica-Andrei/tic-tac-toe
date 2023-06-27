@@ -1,11 +1,11 @@
-export function shuffleArray(array: any[]): void {
+export function shuffleArray<T,>(array: T[]): void {
     for (let i = array.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
         [array[i], array[j]] = [array[j], array[i]];
     }
 }
 
-export function isArraySameValue(array: any[]): boolean {
+export function isArraySameValue<T,>(array: T[]): boolean {
     if (array.length <= 1) {
         return true;
     }
@@ -18,7 +18,7 @@ export function isArraySameValue(array: any[]): boolean {
     return true;
 }
 
-export function isMatrixColSameValue(array: any[][], col: number): boolean {
+export function isMatrixColSameValue<T,>(array: T[][], col: number): boolean {
     if (array.length <= 1) {
         return true;
     }
@@ -31,7 +31,7 @@ export function isMatrixColSameValue(array: any[][], col: number): boolean {
     return true;
 }
 
-export function isMatrixLeftToRightDiagonalSameValue(array: any[][]): boolean {
+export function isMatrixLeftToRightDiagonalSameValue<T,>(array: T[][]): boolean {
     if (array.length <= 1) {
         return true;
     }
@@ -45,7 +45,7 @@ export function isMatrixLeftToRightDiagonalSameValue(array: any[][]): boolean {
 
 }
 
-export function isMatrixRightToLeftDiagonalSameValue(array: any[][]): boolean {
+export function isMatrixRightToLeftDiagonalSameValue<T,>(array: T[][]): boolean {
     if (array.length <= 1) {
         return true;
     }
@@ -60,7 +60,7 @@ export function isMatrixRightToLeftDiagonalSameValue(array: any[][]): boolean {
     return true;
 }
 
-export function doesMatrixHaveValue(array: any[][], val: any): boolean {
+export function doesMatrixHaveValue<T>(array: T[][], val: T): boolean {
     for (let r = 0; r < array.length; r++) {
         for (let c = 0; c < array[r].length; c++) {
             if (array[r][c] === val) {

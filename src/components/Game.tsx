@@ -5,6 +5,7 @@ import GameContext, { IGameContext } from '../context/GameContext';
 import useEnumState from '../hooks/useEnumState';
 import GameOptions from '../classes/GameOptions';
 import AiScore from '../classes/AiScore';
+import useLocalStorageRef from '../hooks/useLocalStorageRef';
 
 const IS_MAIN_MENU_STATE = 0;
 const IS_PLAY_STATE = 1;
@@ -12,9 +13,8 @@ const IS_PLAY_STATE = 1;
 const Game = () => {
     const [gameState, setMainMenu, setPlay] = useEnumState(IS_MAIN_MENU_STATE, IS_PLAY_STATE);
     const [key, setKey] = useState(0);
-    const options = useRef(new GameOptions());
-    const aiScore = useRef(new AiScore());
-
+    const options = useLocalStorageRef("Options", new GameOptions());
+    const aiScore = useLocalStorageRef("AiScore", new AiScore());
     const gameContextValue: IGameContext = {
         state: {
             setMainMenu: setMainMenu,
@@ -31,7 +31,7 @@ const Game = () => {
         <GameContext.Provider value={gameContextValue}>
             <>
                 {gameState === IS_MAIN_MENU_STATE && <MainMenu />}
-                {gameState === IS_PLAY_STATE && <GridManager key={key} aiDifficulty={options.current.aiDifficulty} />}
+                {gameState === IS_PLAY_STATE && <GridManager key={key} aiDifficulty={options.current.data.aiDifficulty} />}
             </>
         </GameContext.Provider>
     );

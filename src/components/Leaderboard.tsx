@@ -10,7 +10,7 @@ const Leaderboard = (props: IProps) => {
 
     const gameContext = useContext(GameContext);
     const difficulties = ["Easy", "Medium", "Hard", "Impossible"]
-    const htmlRows = gameContext.aiScore.difficulties.map((difficulty, index) => (
+    const htmlRows = gameContext.aiScore.data.difficulties.map((difficulty, index) => (
         <tr className={leaderboardCSS.row} key={index}>
             <td>{difficulties[index]}</td>
             <td>{difficulty.wins}</td>
@@ -22,7 +22,7 @@ const Leaderboard = (props: IProps) => {
     return (
         <>
             <button className={appCSS.actionButton} onClick={props.setMainMenuPage}>Back</button>
-            <table style={{ width: "100%" }}>
+            <table className={leaderboardCSS.table}>
                 <thead>
                     <tr>
                         <th>Difficulty</th>
