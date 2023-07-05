@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import type Vector2 from '../classes/Vector2';
 import gridCSS from '../css/grid.module.css'
 import appCSS from '../css/app.module.css'
@@ -16,7 +16,7 @@ interface IProps {
 const Cell = (props: IProps) => {
 
     const gameContext = useContext(GameContext);
-
+    const [isAnimationEnd, setAnimationEnd] = useState(false); 
     const clickHandler = () => {
         if (props.children.length === 0) {
             props.clickFunc(props.pos);
@@ -24,12 +24,16 @@ const Cell = (props: IProps) => {
     };
     const animName = gameContext.options.data.symbolAnimationToggle ? gridCSS.playCellAnim : appCSS.playNoAnim;
     const hoverClass = props.gridManager.isPlayerTurn ? gridCSS.validActionHover : '';
-    const className = props.children ? animName : hoverClass;
-    
+    const className = props.children ? (isAnimationEnd ? gridCSS.cellAnimEnd : animName) : hoverClass;
+    console.log(className);
+    const onAnimationEnd = () =>{
+        props.gridManager.nextCharacterAction();
+        setAnimationEnd(true);  
+    }
 
     return (
         <td className={`${gridCSS.cell} noSelect`} onClick={clickHandler} style={props.style}>
-            <p className={className} onAnimationEnd={props.gridManager.nextCharacterAction}>
+            <p className={className} onAnimationEnd={onAnimationEnd}>
                 {props.children}
             </p>
         </td>
