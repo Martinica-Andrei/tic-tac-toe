@@ -49,7 +49,7 @@ const MainMenu = () => {
 
                 <button className={appCSS.actionButton} onClick={() => { setBeforePlayOptionsPage(); setAnimClassWrapper(appCSS.playFadeRight) }}>Play</button>
                 <button className={appCSS.actionButton} onClick={() => { setOptionsPage(); setAnimClassWrapper(appCSS.playFadeLeft) }}>Options</button>
-                <button className={appCSS.actionButton} onClick={() => { setLeaderboardPage(); setAnimClassWrapper(appCSS.playFadeLeft) }}>Score AI</button>
+                <button className={appCSS.actionButton} onClick={() => { setLeaderboardPage(); setAnimClassWrapper(appCSS.playFadeLeft) }}>Score</button>
             </>
         );
     }
