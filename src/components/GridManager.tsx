@@ -82,7 +82,8 @@ export interface IGridManagerPublicData {
     setMatrixValue: (row: number, col: number, val: string) => void;
     setClickFunc: (func: (pos: Vector2) => void) => void;
     nextCharacterAction: () => void;
-    matrix: IMatrix
+    matrix: IMatrix;
+    isPlayerTurn : boolean;
 }
 
 interface IProps {
@@ -94,6 +95,8 @@ const GridManager = (props: IProps) => {
     const [matrix, setMatrix] = useReducer(matrixReducer, useMemo(initMatrix, []));
     const [clickFunc, setClickFunc] = useState(emptyClickFunc);
     const [nextCharacterAction, setNextCharacterAction] = useState(true);
+    const [currentCharacterIndex, setCurrentCharacterIndex] = useState(getRandomInt(0, 2));
+    const [isGameOverState, setGameOverState] = useState('');
 
     const setMatrixValue = (row: number, col: number, val: string) => {
         setMatrix({ setCell: { row: row, col: col, value: val } });
@@ -110,11 +113,13 @@ const GridManager = (props: IProps) => {
         setMatrixValue: setMatrixValue,
         setClickFunc: setClickFuncWrapper,
         nextCharacterAction: activateNextCharacterAction,
-        matrix: matrix
+        matrix: matrix,
+        isPlayerTurn: false
 
     };
 
     const gridManagerPublicData = useRef(gridManagerPublicDataCopy);
+
     gridManagerPublicData.current = gridManagerPublicDataCopy;
     const initCharacters = () => {
         let player = new Player(gameContext, gridManagerPublicData);
@@ -131,8 +136,8 @@ const GridManager = (props: IProps) => {
     }
 
     const characters = useRef(useMemo(initCharacters, []));
-    const [currentCharacterIndex, setCurrentCharacterIndex] = useState(getRandomInt(0, 2));
-    const [isGameOverState, setGameOverState] = useState('');
+
+    gridManagerPublicData.current.isPlayerTurn = characters.current[currentCharacterIndex] instanceof Player;
 
     useEffect(() => {
         return () => {

@@ -18,6 +18,15 @@
     font-size: 100px;
 }
 
+.cell > p{
+    width:100%;
+    height:100% ;
+}   
+
+.validActionHover:hover{
+    background-color: rgb(var(--gray));
+}
+
 .gameOverMessage {
     font-size: 64px;
     color: rgb(var(--white));

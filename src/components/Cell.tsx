@@ -23,7 +23,8 @@ const Cell = (props: IProps) => {
         }
     };
     const animName = gameContext.options.data.symbolAnimationToggle ? gridCSS.playCellAnim : appCSS.playNoAnim;
-    const className = props.children ? animName : '';
+    const hoverClass = props.gridManager.isPlayerTurn ? gridCSS.validActionHover : '';
+    const className = props.children ? animName : hoverClass;
     
 
     return (
