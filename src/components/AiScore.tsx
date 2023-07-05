@@ -4,7 +4,7 @@ import leaderboardCSS from '../css/leaderboard.module.css'
 import GameContext from '../context/GameContext';
 import MainMenuContext from '../context/MainMenuContext';
 
-const Leaderboard = () => {
+const AiScore = () => {
 
     const gameContext = useContext(GameContext);
     const mainMenuContext = useContext(MainMenuContext);
@@ -39,4 +39,4 @@ const Leaderboard = () => {
 
 };
 
-export default Leaderboard;
+export default AiScore;

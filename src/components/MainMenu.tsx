@@ -3,7 +3,7 @@ import appCSS from '../css/app.module.css'
 import useEnumState from '../hooks/useEnumState';
 import BeforePlayOptions from './BeforePlayOptions';
 import GeneralOptions from './GeneralOptions';
-import Leaderboard from './Leaderboard';
+import AiScore from './AiScore';
 import MainMenuContext from '../context/MainMenuContext';
 import type { IMainMenuContext } from '../context/MainMenuContext';
 import GameContext from '../context/GameContext';
@@ -46,10 +46,10 @@ const MainMenu = () => {
     if (actualPage === FIRST_PAGE) {
         htmlPage = (
             <>
-                {/* <button className={appCSS.actionButton} onClick={setBeforePlayOptionsPage}>Play</button> */}
+
                 <button className={appCSS.actionButton} onClick={() => { setBeforePlayOptionsPage(); setAnimClassWrapper(appCSS.playFadeRight) }}>Play</button>
                 <button className={appCSS.actionButton} onClick={() => { setOptionsPage(); setAnimClassWrapper(appCSS.playFadeLeft) }}>Options</button>
-                <button className={appCSS.actionButton} onClick={() => { setLeaderboardPage(); setAnimClassWrapper(appCSS.playFadeLeft) }}>Leaderboard</button>
+                <button className={appCSS.actionButton} onClick={() => { setLeaderboardPage(); setAnimClassWrapper(appCSS.playFadeLeft) }}>Score AI</button>
             </>
         );
     }
@@ -67,7 +67,7 @@ const MainMenu = () => {
 
     else if (actualPage === LEADERBOARD_PAGE) {
         htmlPage = (
-            <Leaderboard></Leaderboard>
+            <AiScore></AiScore>
         );
     }
 
@@ -81,6 +81,7 @@ const MainMenu = () => {
         <MainMenuContext.Provider value={mainMenuContextValue}>
             <div>
                 <h1 className={appCSS.title}>Tic Tac Toe</h1>
+                <h1 className={appCSS.subTitle}>Offline</h1>
                 <div className={`${appCSS.mainMenu} ${animClass}`} onAnimationEnd={() => { setAnimClass(''); animEndCallback(); }}>
                     {htmlPage}
                 </div>

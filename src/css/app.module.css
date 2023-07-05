@@ -21,6 +21,12 @@ p{
     font-size: 60px;
 }
 
+.subTitle {
+    color: rgb(var(--title-color));
+    text-align: center;
+    font-size: 30px;
+}
+
 .mainMenu {
     margin: auto;
     background-color: rgb(var(--white));
