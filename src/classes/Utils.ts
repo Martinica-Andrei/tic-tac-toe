@@ -74,3 +74,15 @@ export function doesMatrixHaveValue<T>(array: T[][], val: T): boolean {
 export function getRandomInt(minInclusive : number, maxExclusive: number) {
     return Math.floor(minInclusive + Math.random() * (maxExclusive - minInclusive));
 }
+
+export const getStorageValue = <T,>(key: string, initialValue: T) => {
+    const saved = localStorage.getItem(key);
+    let data = initialValue;
+    if (saved !== null) {
+        data = JSON.parse(saved);
+    }
+    else{
+        localStorage.setItem(key, JSON.stringify(initialValue));
+    }
+    return data;
+}

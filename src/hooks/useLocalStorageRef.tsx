@@ -1,4 +1,5 @@
 import { useMemo, useRef } from 'react';
+import { getStorageValue } from '../classes/Utils';
 
 export class DataWithUpdate<T>{
     data : T;
@@ -18,19 +19,6 @@ export class DataWithUpdate<T>{
     }
 }
 
-const getStorageValue = <T,>(key: string, initialValue: T) => {
-    const saved = localStorage.getItem(key);
-    let data = initialValue;
-    if (saved !== null) {
-        data = JSON.parse(saved);
-    }
-    else{
-        localStorage.setItem(key, JSON.stringify(initialValue));
-    }
-    const customCurrent = new DataWithUpdate(key, data);
-    return customCurrent;
-}
-
 /**
  * 
  * @param key  key in local storage
@@ -39,7 +27,7 @@ const getStorageValue = <T,>(key: string, initialValue: T) => {
  * that modifies localStorage data 
  */
 const useLocalStorageRef = <T,>(key: string, initialValue: T) => {
-    const ref = useRef(useMemo(() => getStorageValue(key, initialValue), []));
+    const ref = useRef(useMemo(() => new DataWithUpdate(key, getStorageValue(key, initialValue)), []));
 
     return ref;
 };

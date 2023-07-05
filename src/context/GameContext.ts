@@ -10,6 +10,7 @@ export interface IGameContext {
     };
     readonly options : DataWithUpdate<GameOptions>;
     readonly aiScore : DataWithUpdate<AiScore>;
+    readonly setIsOnline : React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const GameContext = React.createContext<IGameContext>(
@@ -20,7 +21,8 @@ const GameContext = React.createContext<IGameContext>(
             setPlay: () => { }
         },
         options : new DataWithUpdate('', new GameOptions()),
-        aiScore : new DataWithUpdate('', new AiScore())
+        aiScore : new DataWithUpdate('', new AiScore()),
+        setIsOnline : () =>{}
     }
 );
 
