@@ -16,16 +16,21 @@
     align-items: center;
 }
 
-.symbolAnimationToggleDiv{
+.singleToggleDiv{
     display:flex;
     justify-content: space-between;
     align-items: center;
 }
-.symbolAnimationToggleDiv input{
+.singleToggleDiv input{
     width:20px;
     height: 20px;
 }
 
+
 .generalOptions *{
     font-size:25px;
+}
+
+.generalOptions > div{
+    margin:20px;
 }

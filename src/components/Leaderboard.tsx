@@ -2,13 +2,12 @@ import { useContext } from 'react';
 import appCSS from '../css/app.module.css'
 import leaderboardCSS from '../css/leaderboard.module.css'
 import GameContext from '../context/GameContext';
-interface IProps {
-    setMainMenuPage: () => void;
-}
+import MainMenuContext from '../context/MainMenuContext';
 
-const Leaderboard = (props: IProps) => {
+const Leaderboard = () => {
 
     const gameContext = useContext(GameContext);
+    const mainMenuContext = useContext(MainMenuContext);
     const difficulties = ["Easy", "Medium", "Hard", "Impossible"]
     const htmlRows = gameContext.aiScore.data.difficulties.map((difficulty, index) => (
         <tr className={leaderboardCSS.row} key={index}>
@@ -21,7 +20,7 @@ const Leaderboard = (props: IProps) => {
 
     return (
         <>
-            <button className={appCSS.actionButton} onClick={props.setMainMenuPage}>Back</button>
+            <button className={appCSS.actionButton} onClick={() => {mainMenuContext.setMainMenuPage(); mainMenuContext.setAnimClass(appCSS.playFadeRight)}}>Back</button>
             <table className={leaderboardCSS.table}>
                 <thead>
                     <tr>

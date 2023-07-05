@@ -17,7 +17,6 @@ class Ai extends Character {
     }
 
     action(): void {
-        console.log(this.gridManager.current.matrix);
         const possibleMoves = this._getPossibleMoves(this.gridManager.current.matrix);
         if (possibleMoves.length === 0) return;
         this._actionTimeout = setTimeout(this._actionBasedOnDifficulty, getRandomInt(0, 500) + 100, possibleMoves);

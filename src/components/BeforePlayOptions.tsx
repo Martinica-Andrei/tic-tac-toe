@@ -3,21 +3,22 @@ import appCSS from '../css/app.module.css'
 import GameContext from '../context/GameContext';
 import { AiDifficulty } from '../classes/Constants';
 import useEnumState from '../hooks/useEnumState';
+import MainMenuContext from '../context/MainMenuContext';
 
-interface IProps {
-    setMainMenuPage: () => void;
-}
-
-const BeforePlayOptions = (props: IProps) => {
+const BeforePlayOptions = () => {
 
     const [difficulty, , setEasy, setMedium, setHard, setImpossible] = useEnumState(AiDifficulty.NO_DIFFICULTY, AiDifficulty.EASY,
         AiDifficulty.MEDIUM, AiDifficulty.HARD, AiDifficulty.IMPOSSIBLE);
     const gameContext = useContext(GameContext);
+    const mainMenuContext = useContext(MainMenuContext);
 
     useEffect(() => {
         if (difficulty !== AiDifficulty.NO_DIFFICULTY) {
-            gameContext.options.data.aiDifficulty = difficulty;
-            gameContext.state.setPlay();
+            mainMenuContext.setAnimClass(appCSS.playFade);
+            mainMenuContext.setAnimEndCallback(() =>{
+                gameContext.options.data.aiDifficulty = difficulty;
+                gameContext.state.setPlay();
+            });
         }
     }, [difficulty]);
 
@@ -27,7 +28,7 @@ const BeforePlayOptions = (props: IProps) => {
             <button className={appCSS.actionButton} onClick={setMedium}>Medium</button>
             <button className={appCSS.actionButton} onClick={setHard}>Hard</button>
             <button className={appCSS.actionButton} onClick={setImpossible}>Impossible</button>
-            <button className={appCSS.actionButton} onClick={props.setMainMenuPage}>Back</button>
+            <button className={appCSS.actionButton}onClick={() => {mainMenuContext.setMainMenuPage(); mainMenuContext.setAnimClass(appCSS.playFadeLeft)}}>Back</button>
         </>
     )
 };

@@ -13,7 +13,7 @@ export class DataWithUpdate<T>{
     }
 
     setData(data : T){
-        this. data = data;
+        this.data = data;
         this.updateLocalStorage();
     }
 }

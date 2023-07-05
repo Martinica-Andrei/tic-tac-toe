@@ -131,7 +131,7 @@ const GridManager = (props: IProps) => {
     }
 
     const characters = useRef(useMemo(initCharacters, []));
-    const currentCharacterIndex = useRef(getRandomInt(-1, 1));
+    const currentCharacterIndex = useRef(getRandomInt(0, 2));
     const [isGameOverState, setGameOverState] = useState('');
 
     useEffect(() => {
@@ -144,17 +144,17 @@ const GridManager = (props: IProps) => {
     }, []);
 
 
-    const setGameOver = (gameOverValue : string) => {
+    const setGameOver = (gameOverValue: string) => {
         const difficultyScore = gameContext.aiScore.data.difficulties[gameContext.options.data.aiDifficulty];
-        if(gameOverValue === 'tie'){
+        if (gameOverValue === 'tie') {
             difficultyScore.ties++;
         }
-        else{
+        else {
             const winner = characters.current.find(c => c.symbol === gameOverValue);
-            if(winner instanceof Player){
+            if (winner instanceof Player) {
                 difficultyScore.wins++;
             }
-            else{
+            else {
                 difficultyScore.losses++;
             }
         }
@@ -169,11 +169,11 @@ const GridManager = (props: IProps) => {
             setGameOver(_isGameOver);
             return;
         }
+        characters.current[currentCharacterIndex.current].action();
         currentCharacterIndex.current++;
         if (currentCharacterIndex.current >= characters.current.length) {
             currentCharacterIndex.current = 0;
         }
-        characters.current[currentCharacterIndex.current].action();
     }
 
     useEffect(() => {
@@ -198,11 +198,16 @@ const GridManager = (props: IProps) => {
     }
 
     return (
-        <div>
-            <button style={{ width: "200px", height: "70px", fontSize: "30px" }} onClick={gameContext.state.setMainMenu}>Main Menu</button>
+        <>
+            <div style={{ display: "flex" }}>
+                <button style={{ width: "200px", height: "70px", fontSize: "30px" }} onClick={gameContext.state.setMainMenu}>Main Menu</button>
+                <div style={{width : "100%", textAlign : "center"}}>
+                    <p style={{fontSize: "30px"}}>{characters.current[currentCharacterIndex.current].name} turn</p>
+                </div>
+            </div>
             <Grid matrix={matrix.data} rows={matrix.rows} cols={matrix.cols} clickFunc={clickFunc}></Grid>
             {gameOverDiv()}
-        </div>
+        </>
     );
 
 };
