@@ -25,7 +25,6 @@ class Ai extends Character {
 
     private _doMove(move: Vector2) {
         this.gridManager.current.setMatrixValue(move.y, move.x, this.symbol);
-        this.gridManager.current.nextCharacterAction();
     }
 
     private _doMoveIfWinningMove(possibleMoves: Vector2[]) {

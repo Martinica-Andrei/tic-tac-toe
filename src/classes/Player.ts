@@ -16,7 +16,6 @@ class Player extends Character{
         const {x, y } = pos;
         this.gridManager.current.setMatrixValue(y, x, this.symbol);
         this.gridManager.current.setClickFunc(() =>{});
-        this.gridManager.current.nextCharacterAction();
     }
 
     destructor(): void {

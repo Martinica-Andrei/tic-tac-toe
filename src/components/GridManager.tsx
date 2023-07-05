@@ -93,7 +93,7 @@ const GridManager = (props: IProps) => {
     const gameContext = useContext(GameContext);
     const [matrix, setMatrix] = useReducer(matrixReducer, useMemo(initMatrix, []));
     const [clickFunc, setClickFunc] = useState(emptyClickFunc);
-    const [nextCharacterAction, setNextCharacterAction] = useState(false);
+    const [nextCharacterAction, setNextCharacterAction] = useState(true);
 
     const setMatrixValue = (row: number, col: number, val: string) => {
         setMatrix({ setCell: { row: row, col: col, value: val } });
@@ -103,13 +103,13 @@ const GridManager = (props: IProps) => {
         setClickFunc(() => func);
     }
 
-    const nextCharacterActionWrapper = () => {
-        setNextCharacterAction(prev => !prev);
+    const activateNextCharacterAction = () => {
+        setNextCharacterAction(true);
     }
     const gridManagerPublicDataCopy: IGridManagerPublicData = {
         setMatrixValue: setMatrixValue,
         setClickFunc: setClickFuncWrapper,
-        nextCharacterAction: nextCharacterActionWrapper,
+        nextCharacterAction: activateNextCharacterAction,
         matrix: matrix
 
     };
@@ -131,7 +131,7 @@ const GridManager = (props: IProps) => {
     }
 
     const characters = useRef(useMemo(initCharacters, []));
-    const currentCharacterIndex = useRef(getRandomInt(0, 2));
+    const [currentCharacterIndex, setCurrentCharacterIndex] = useState(getRandomInt(0, 2));
     const [isGameOverState, setGameOverState] = useState('');
 
     useEffect(() => {
@@ -169,44 +169,53 @@ const GridManager = (props: IProps) => {
             setGameOver(_isGameOver);
             return;
         }
-        characters.current[currentCharacterIndex.current].action();
-        currentCharacterIndex.current++;
-        if (currentCharacterIndex.current >= characters.current.length) {
-            currentCharacterIndex.current = 0;
+        let nextIndex = currentCharacterIndex + 1;
+        if (nextIndex >= characters.current.length) {
+            nextIndex = 0;
         }
+        characters.current[nextIndex].action();
+        setCurrentCharacterIndex(nextIndex);
     }
 
     useEffect(() => {
-        characterAction();
+        if (nextCharacterAction === true) {
+            characterAction();
+            setNextCharacterAction(false);
+        }
     }, [nextCharacterAction]);
 
-    const gameOverDiv = (): JSX.Element | undefined => {
+    const gameOverHtml = (): [JSX.Element | undefined, JSX.Element | undefined] => {
         if (isGameOverState.length === 0) {
-            return undefined;
+            return [undefined, undefined]
         }
         let winner = characters.current.find(c => c.symbol === isGameOverState);
         let message = winner !== undefined ? `Winner : ${winner.name}` : "TIE";
-        return (
-            <>
-                <div className={gridCSS.gameOverMessage}>
-                    <p>{message}</p>
-                    <button onClick={gameContext.state.setPlay}>Play again</button>
-                </div>
-            </>
-        );
+        return [<p>{message}</p>, <button className={gridCSS.restartGameButton} onClick={gameContext.state.setPlay}>Play again</button>];
 
     }
 
+    const [gameOverMessage, restartGameButton] = gameOverHtml();
+
     return (
         <>
-            <div style={{ display: "flex" }}>
+            <div className={gridCSS.nav}>
                 <button style={{ width: "200px", height: "70px", fontSize: "30px" }} onClick={gameContext.state.setMainMenu}>Main Menu</button>
-                <div style={{width : "100%", textAlign : "center"}}>
-                    <p style={{fontSize: "30px"}}>{characters.current[currentCharacterIndex.current].name} turn</p>
-                </div>
             </div>
-            <Grid matrix={matrix.data} rows={matrix.rows} cols={matrix.cols} clickFunc={clickFunc}></Grid>
-            {gameOverDiv()}
+            <div className={gridCSS.gameOverMessage}>
+                {gameOverMessage}
+            </div>
+            <div className={gridCSS.leftDiv}>
+
+            </div>
+            <div className={gridCSS.middleDiv}>
+                <Grid gridManager={gridManagerPublicData.current} clickFunc={clickFunc}></Grid>
+            </div>
+            <div className={gridCSS.rightDiv}>
+                <p style={{ fontSize: "50px", color: "white" , margin: "30px"}}>{characters.current[currentCharacterIndex].name} turn</p>
+            </div>
+            <div className={gridCSS.footerDiv}>
+                {restartGameButton}
+            </div>
         </>
     );
 

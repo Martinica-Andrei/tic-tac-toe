@@ -10,6 +10,9 @@
 body {
     background-color: rgb(var(--dark-red));
 }
+p{
+    margin:0;
+}
 
 .title {
     color: rgb(var(--title-color));
@@ -84,3 +87,12 @@ body {
     cursor: pointer;
     transform: scale(1.1);
 }
+
+@keyframes noAnim {
+}
+
+.playNoAnim{
+    animation-name : noAnim;
+    animation-duration :0s;
+    animation-fill-mode: forwards;
+}   
